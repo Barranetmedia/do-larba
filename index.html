@@ -297,6 +297,59 @@
       border-color: rgba(253, 164, 175, 0.32);
     }
 
+    /* Mobile Responsive Tables: Hilangkan horizontal scroll pada layar < 768px */
+    @media (max-width: 767px) {
+      .responsive-table thead {
+        display: none;
+      }
+      .responsive-table,
+      .responsive-table tbody,
+      .responsive-table tr,
+      .responsive-table td {
+        display: block;
+        width: 100%;
+      }
+      .responsive-table tr {
+        padding: 0.85rem 1rem;
+      }
+      .responsive-table td {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.28rem 0 !important;
+        text-align: right;
+        font-size: 12.5px;
+      }
+      .responsive-table td:first-child {
+        display: block;
+        text-align: left;
+        font-size: 14px;
+        padding-bottom: 0.45rem !important;
+        margin-bottom: 0.35rem;
+        border-bottom: 1px solid var(--hairline);
+      }
+      .responsive-table td:not(:first-child)::before {
+        content: attr(data-label);
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-muted);
+        text-align: left;
+        flex-shrink: 0;
+      }
+      .responsive-table td[colspan] {
+        display: block;
+        text-align: center;
+        border-bottom: none;
+        padding: 1rem 0 !important;
+      }
+      .responsive-table td[colspan]::before {
+        content: none;
+      }
+    }
+
     @keyframes goldRadarPulse {
       0%, 100% {
         transform: scale(1);
@@ -404,31 +457,31 @@
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="relative min-h-[100dvh] selection:bg-[#8B96F2]/25">
+<body class="relative min-h-[100dvh] selection:bg-[#8B96F2]/25 overflow-x-hidden">
 
   <div class="atmosphere-dark fixed inset-0 pointer-events-none z-0" aria-hidden="true"></div>
   <div class="atmosphere-light fixed inset-0 pointer-events-none z-0" aria-hidden="true"></div>
 
-  <div class="relative z-10 w-full max-w-[1080px] mx-auto px-5 sm:px-8 pt-8 pb-24">
+  <div class="relative z-10 w-full max-w-[1080px] mx-auto px-4 sm:px-8 pt-7 sm:pt-8 pb-24">
 
     <!-- Header -->
-    <header class="flex flex-wrap items-center justify-between gap-3 pb-6 mb-8 border-b border-[var(--hairline)]">
-      <div class="flex items-center gap-4">
+    <header class="flex flex-wrap items-center justify-between gap-3 pb-5 sm:pb-6 mb-7 sm:mb-8 border-b border-[var(--hairline)]">
+      <div class="flex flex-wrap items-center gap-3 sm:gap-4">
         <button
           id="brandResetBtn"
           type="button"
           class="inline-flex items-baseline focus:outline-none cursor-pointer"
           aria-label="larba."
         >
-          <span class="editorial-heading text-[26px] text-lotus-primary leading-none">larba</span>
-          <span style="color: var(--accent-purple-dot);" class="editorial-heading text-[28px] leading-none">.</span>
+          <span class="editorial-heading text-[24px] sm:text-[26px] text-lotus-primary leading-none">larba</span>
+          <span style="color: var(--accent-purple-dot);" class="editorial-heading text-[26px] sm:text-[28px] leading-none">.</span>
         </button>
 
-        <nav id="mainNavTabs" class="hidden items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <nav id="mainNavTabs" class="hidden items-center gap-1.5 flex-wrap">
           <button
             type="button"
             data-tab="tabAttention"
-            class="nav-tab-btn lotus-tab-active inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold cursor-pointer whitespace-nowrap"
+            class="nav-tab-btn lotus-tab-active inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full text-[11.5px] sm:text-[12px] font-semibold cursor-pointer whitespace-nowrap"
           >
             <span>Needs Your Attention</span>
             <span id="attentionNavBadge" class="px-1.5 py-0.2 rounded-full text-[10.5px] font-bold bg-[#FDA4AF]/20 text-lotus-retur">0</span>
@@ -436,7 +489,7 @@
           <button
             type="button"
             data-tab="tabCorner"
-            class="nav-tab-btn lotus-pill px-3.5 py-1.5 rounded-full text-[12px] font-medium text-lotus-primary cursor-pointer whitespace-nowrap"
+            class="nav-tab-btn lotus-pill px-3 sm:px-3.5 py-1.5 rounded-full text-[11.5px] sm:text-[12px] font-medium text-lotus-primary cursor-pointer whitespace-nowrap"
           >
             CS Corner
           </button>
@@ -462,7 +515,7 @@
         <button
           id="themeToggleBtn"
           type="button"
-          class="lotus-pill inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium text-lotus-primary cursor-pointer"
+          class="lotus-pill inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-full text-[11.5px] sm:text-[12px] font-medium text-lotus-primary cursor-pointer"
         >
           <svg id="iconSun" class="w-3.5 h-3.5 text-lotus-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="4"></circle>
@@ -515,12 +568,12 @@
             Needs Your Attention
           </h1>
           <p class="text-[13px] text-lotus-secondary mt-1">
-            Tindak lanjut pesanan berisiko dan kelengkapan bukti retur pelanggan.
+            Kerjakan ini tiap hari ya guys ya
           </p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="search-underline pb-1.5 min-w-[160px]">
+        <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+          <div class="search-underline pb-1.5 min-w-[150px] flex-1 sm:flex-initial">
             <label for="attCsFilter" class="block font-sans text-[10.5px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Filter Nama CS</label>
             <select id="attCsFilter" class="w-full bg-transparent text-[13px] font-semibold text-lotus-primary focus:outline-none cursor-pointer">
               <option value="ALL">Semua CS</option>
@@ -530,7 +583,7 @@
           <button
             id="btnCheckSpxRisk"
             type="button"
-            class="lotus-pill inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-semibold text-lotus-accent hover:text-lotus-primary cursor-pointer"
+            class="lotus-pill inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-semibold text-lotus-accent hover:text-lotus-primary cursor-pointer"
           >
             <span class="w-1.5 h-1.5 rounded-full radar-pulse-dot"></span>
             <span id="btnCheckSpxLabel">Cek Gagal Antar Live SPX</span>
@@ -540,7 +593,7 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         <section class="literal-attention-box literal-box-risk">
-          <div class="px-5 py-3.5 border-b border-[var(--hairline)] flex items-center justify-between gap-2 bg-[#F6C856]/10">
+          <div class="px-4 sm:px-5 py-3.5 border-b border-[var(--hairline)] flex items-center justify-between gap-2 bg-[#F6C856]/10">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-[#F6C856]"></span>
               <h2 class="text-[14px] font-bold tracking-wide uppercase text-lotus-gold">Berisiko</h2>
@@ -551,7 +604,7 @@
         </section>
 
         <section class="literal-attention-box literal-box-retur">
-          <div class="px-5 py-3.5 border-b border-[var(--hairline)] flex items-center justify-between gap-2 bg-[#FDA4AF]/10">
+          <div class="px-4 sm:px-5 py-3.5 border-b border-[var(--hairline)] flex items-center justify-between gap-2 bg-[#FDA4AF]/10">
             <div class="flex items-center gap-2">
               <span class="w-2 h-2 rounded-full bg-[#FDA4AF]"></span>
               <h2 class="text-[14px] font-bold tracking-wide uppercase text-lotus-retur">Retur</h2>
@@ -575,25 +628,25 @@
           </p>
         </div>
 
-        <div class="flex flex-wrap items-end gap-4">
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-end gap-3 sm:gap-4 w-full sm:w-auto">
           <div class="search-underline pb-1.5">
             <label for="cornerDateFrom" class="block font-sans text-[10.5px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Dari Tanggal</label>
-            <input type="date" id="cornerDateFrom" class="bg-transparent text-[12.5px] font-semibold text-lotus-primary focus:outline-none" />
+            <input type="date" id="cornerDateFrom" class="w-full bg-transparent text-[12.5px] font-semibold text-lotus-primary focus:outline-none" />
           </div>
 
           <div class="search-underline pb-1.5">
             <label for="cornerDateTo" class="block font-sans text-[10.5px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Sampai Tanggal</label>
-            <input type="date" id="cornerDateTo" class="bg-transparent text-[12.5px] font-semibold text-lotus-primary focus:outline-none" />
+            <input type="date" id="cornerDateTo" class="w-full bg-transparent text-[12.5px] font-semibold text-lotus-primary focus:outline-none" />
           </div>
 
-          <div class="search-underline pb-1.5 min-w-[140px]">
+          <div class="search-underline pb-1.5 sm:min-w-[140px]">
             <label for="cornerCsFilter" class="block font-sans text-[10.5px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Filter CS</label>
             <select id="cornerCsFilter" class="w-full bg-transparent text-[12.5px] font-semibold text-lotus-primary focus:outline-none cursor-pointer">
               <option value="ALL">Semua CS</option>
             </select>
           </div>
 
-          <button id="btnActiveMonth" type="button" class="lotus-pill px-3.5 py-2 rounded-full text-[12px] font-medium text-lotus-primary cursor-pointer">
+          <button id="btnActiveMonth" type="button" class="lotus-pill px-3.5 py-2 rounded-full text-[12px] font-medium text-lotus-primary cursor-pointer justify-self-start">
             Bulan Aktif
           </button>
         </div>
@@ -603,8 +656,8 @@
         <h2 class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-lotus-secondary mb-3">
           1. Ringkasan Per CS &amp; Persentase Retur
         </h2>
-        <div class="overflow-x-auto rounded-xl border border-[var(--hairline)]">
-          <table id="csSummaryTable" class="w-full text-left border-collapse text-[13px]">
+        <div class="rounded-xl border border-[var(--hairline)] overflow-hidden">
+          <table id="csSummaryTable" class="responsive-table w-full text-left border-collapse text-[13px]">
             <thead>
               <tr class="border-b border-[var(--hairline)] bg-[var(--pill-bg)] text-[11.5px] uppercase tracking-wider text-lotus-secondary">
                 <th class="py-3 px-4 font-semibold">Nama CS</th>
@@ -623,13 +676,17 @@
       </section>
 
       <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-9">
-        <div class="p-5 rounded-2xl border border-[var(--hairline)] bg-[var(--pill-bg)]">
+        <div class="p-4 sm:p-5 rounded-2xl border border-[var(--hairline)] bg-[var(--pill-bg)]">
           <h3 class="text-[13px] font-bold text-lotus-primary mb-3">Proporsi Status Order per CS</h3>
-          <canvas id="chartCsStatus" height="195"></canvas>
+          <div class="relative w-full h-[220px] sm:h-[235px]">
+            <canvas id="chartCsStatus"></canvas>
+          </div>
         </div>
-        <div class="p-5 rounded-2xl border border-[var(--hairline)] bg-[var(--pill-bg)]">
+        <div class="p-4 sm:p-5 rounded-2xl border border-[var(--hairline)] bg-[var(--pill-bg)]">
           <h3 class="text-[13px] font-bold text-lotus-primary mb-3">Distribusi Alasan Retur</h3>
-          <canvas id="chartReturReason" height="195"></canvas>
+          <div class="relative w-full h-[240px] sm:h-[235px]">
+            <canvas id="chartReturReason"></canvas>
+          </div>
         </div>
       </section>
 
@@ -637,8 +694,8 @@
         <h2 class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-lotus-secondary mb-3">
           2. Breakdown Distribusi Area Order &amp; Retur (6 Wilayah)
         </h2>
-        <div class="overflow-x-auto rounded-xl border border-[var(--hairline)]">
-          <table id="regionBreakdownTable" class="w-full text-left border-collapse text-[13px]">
+        <div class="rounded-xl border border-[var(--hairline)] overflow-hidden">
+          <table id="regionBreakdownTable" class="responsive-table w-full text-left border-collapse text-[13px]">
             <thead>
               <tr class="border-b border-[var(--hairline)] bg-[var(--pill-bg)] text-[11.5px] uppercase tracking-wider text-lotus-secondary">
                 <th class="py-3 px-4 font-semibold">Wilayah</th>
@@ -659,8 +716,8 @@
         <h2 class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-lotus-secondary mb-3">
           3. Breakdown Alasan Retur (Keseluruhan &amp; Tiap Daerah)
         </h2>
-        <div class="overflow-x-auto rounded-xl border border-[var(--hairline)]">
-          <table id="reasonByRegionTable" class="w-full text-left border-collapse text-[13px]">
+        <div class="rounded-xl border border-[var(--hairline)] overflow-hidden">
+          <table id="reasonByRegionTable" class="responsive-table w-full text-left border-collapse text-[13px]">
             <thead>
               <tr class="border-b border-[var(--hairline)] bg-[var(--pill-bg)] text-[11.5px] uppercase tracking-wider text-lotus-secondary">
                 <th class="py-3 px-4 font-semibold">Alasan Retur</th>
@@ -694,7 +751,7 @@
       role="dialog"
       aria-modal="true"
       aria-label="Detail Perjalanan Paket"
-      class="drawer-sheet w-full max-w-[580px] max-h-[86vh] rounded-t-3xl px-6 pt-4 pb-10 flex flex-col"
+      class="drawer-sheet w-full max-w-[580px] max-h-[86vh] rounded-t-3xl px-5 sm:px-6 pt-4 pb-10 flex flex-col"
     >
       <div style="background-color: var(--hairline);" class="w-10 h-1 rounded-full mx-auto mb-5 shrink-0"></div>
 
@@ -731,7 +788,7 @@
 
   <!-- MODAL: INPUT FEEDBACK BERISIKO -->
   <div id="feedbackModalOverlay" aria-hidden="true" class="drawer-overlay fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="drawer-sheet w-full max-w-[460px] rounded-2xl p-6 border border-[var(--pill-border)]" style="transform:none;">
+    <div class="drawer-sheet w-full max-w-[460px] rounded-2xl p-5 sm:p-6 border border-[var(--pill-border)]" style="transform:none;">
       <div class="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-[var(--hairline)]">
         <h3 id="fbModalTitle" class="text-[15px] font-bold text-lotus-primary">Input Feedback Berisiko</h3>
         <button type="button" onclick="closeActionModal('feedbackModalOverlay')" class="lotus-pill px-3 py-1 rounded-full text-[12px] text-lotus-secondary cursor-pointer">Tutup</button>
@@ -754,7 +811,7 @@
 
   <!-- MODAL: INPUT DETAIL RETUR -->
   <div id="returModalOverlay" aria-hidden="true" class="drawer-overlay fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="drawer-sheet w-full max-w-[480px] max-h-[90vh] overflow-y-auto rounded-2xl p-6 border border-[var(--pill-border)]" style="transform:none;">
+    <div class="drawer-sheet w-full max-w-[480px] max-h-[90vh] overflow-y-auto rounded-2xl p-5 sm:p-6 border border-[var(--pill-border)]" style="transform:none;">
       <div class="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-[var(--hairline)]">
         <h3 id="returModalTitle" class="text-[15px] font-bold text-lotus-primary">Lengkapi Data Retur</h3>
         <button type="button" onclick="closeActionModal('returModalOverlay')" class="lotus-pill px-3 py-1 rounded-full text-[12px] text-lotus-secondary cursor-pointer">Tutup</button>
@@ -813,6 +870,7 @@
     var API_URL = "https://script.google.com/macros/s/AKfycbyZo8dEMfDcS84-WDwZiZeZS-WzdAwLOAyr_lU1TAovOZdW7PV0Qh338mhNJRDOKua1oA/exec";
     var GOOGLE_CLIENT_ID = "315770296664-pkethfkpdhd9bqj1lnjj0ec06eos8rlv.apps.googleusercontent.com";
     var SESSION_KEY = "larba_session_v1";
+    var ATTENTION_MIN_DATE = "2026-11-20"; // Hanya tampilkan & deteksi mulai 20 November 2026
 
     var SESSION_TOKEN = null;
     try { SESSION_TOKEN = localStorage.getItem(SESSION_KEY); } catch (e) {}
@@ -1003,7 +1061,6 @@
     window.onload = function () {
       resetCornerActiveMonth(false);
 
-      // Jika sesi 30 hari masih tersimpan di browser, langsung muat data tanpa login ulang
       if (SESSION_TOKEN) {
         el.loginStatus.textContent = 'Memulihkan sesi & memuat data...';
         jsonpRequest({ session: SESSION_TOKEN, action: 'getAll' }, function (err, data) {
@@ -1068,7 +1125,6 @@
       var idToken = response.credential;
       el.loginStatus.textContent = 'Membuat sesi login 30 hari...';
 
-      // Tukar ID Token Google dengan Token Sesi 30 Hari
       jsonpRequest({ token: idToken, action: 'login' }, function (err, loginData) {
         if (err) {
           el.loginStatus.textContent = 'Gagal terhubung: ' + err.message;
@@ -1144,8 +1200,19 @@
       });
     }
 
-    /* 3. TAB 1: NEEDS YOUR ATTENTION */
+    /* 3. TAB 1: NEEDS YOUR ATTENTION (MULAI 20 NOV 2026 & URUT TERBARU DI ATAS) */
     el.attCsFilter.addEventListener('change', renderAttention);
+
+    function isWithinAttentionWindow(o) {
+      return Boolean(o.tanggalKey && o.tanggalKey >= ATTENTION_MIN_DATE);
+    }
+
+    function sortNewestFirst(a, b) {
+      if (a.tanggalKey !== b.tanggalKey) {
+        return a.tanggalKey < b.tanggalKey ? 1 : -1;
+      }
+      return (b.rowNumber || 0) - (a.rowNumber || 0);
+    }
 
     function renderAttention() {
       var selectedCs = el.attCsFilter.value;
@@ -1154,12 +1221,17 @@
         return o.cs === selectedCs;
       };
 
-      var riskItems = allOrders.filter(function (o) {
-        return o.statusGroup === 'ongoing' && o.isRisk && byCs(o);
-      });
-      var returItems = allOrders.filter(function (o) {
-        return o.isRetur && !o.isReturCompleted && byCs(o);
-      });
+      var riskItems = allOrders
+        .filter(function (o) {
+          return isWithinAttentionWindow(o) && o.statusGroup === 'ongoing' && o.isRisk && byCs(o);
+        })
+        .sort(sortNewestFirst);
+
+      var returItems = allOrders
+        .filter(function (o) {
+          return isWithinAttentionWindow(o) && o.isRetur && !o.isReturCompleted && byCs(o);
+        })
+        .sort(sortNewestFirst);
 
       el.riskCountBadge.textContent = riskItems.length;
       el.returCountBadge.textContent = returItems.length;
@@ -1207,7 +1279,7 @@
             '</div>' +
           '</div>'
         );
-      }).join('') : '<div class="p-8 text-center text-[13px] text-lotus-muted">Tidak ada paket berisiko untuk filter ini.</div>';
+      }).join('') : '<div class="p-8 text-center text-[13px] text-lotus-muted">Tidak ada paket berisiko sejak 20 Nov 2026.</div>';
 
       el.returListBody.innerHTML = returItems.length ? returItems.map(function (o) {
         var safeResi = o.resi.replace(/'/g, "\\'");
@@ -1227,16 +1299,19 @@
             '</div>' +
           '</div>'
         );
-      }).join('') : '<div class="p-8 text-center text-[13px] text-lotus-muted">Semua data retur sudah dilengkapi.</div>';
+      }).join('') : '<div class="p-8 text-center text-[13px] text-lotus-muted">Semua data retur sejak 20 Nov 2026 sudah dilengkapi.</div>';
     }
 
     el.btnCheckSpxRisk.addEventListener('click', function () {
-      var candidates = allOrders.filter(function (o) {
-        return o.statusGroup === 'ongoing' && !o.isRisk && o.needsSpxCheck;
-      }).map(function (o) { return o.resi; });
+      var candidates = allOrders
+        .filter(function (o) {
+          return isWithinAttentionWindow(o) && o.statusGroup === 'ongoing' && !o.isRisk && o.needsSpxCheck;
+        })
+        .sort(sortNewestFirst)
+        .map(function (o) { return o.resi; });
 
       if (candidates.length === 0) {
-        showToast('Tidak ada kandidat ongoing baru untuk dicek');
+        showToast('Tidak ada kandidat ongoing baru sejak 20 Nov 2026');
         return;
       }
 
@@ -1462,14 +1537,14 @@
 
         return (
           '<tr class="zebra-row">' +
-            '<td class="py-3 px-4 font-semibold text-lotus-primary">' + escapeHtml(r.cs) + '</td>' +
-            '<td class="py-3 px-3.5 font-medium">' + r.total + '</td>' +
-            '<td class="py-3 px-3.5 text-lotus-delivered font-semibold">' + r.delivered + '</td>' +
-            '<td class="py-3 px-3.5 text-lotus-gold font-semibold">' + r.ongoing + '</td>' +
-            '<td class="py-3 px-3.5 text-lotus-retur font-bold">' + r.retur + '</td>' +
-            '<td class="py-3 px-3.5">' + pctOwn + '%</td>' +
-            '<td class="py-3 px-3.5">' + pctAllOrder + '%</td>' +
-            '<td class="py-3 px-4 font-semibold text-lotus-accent">' + pctShareRetur + '%</td>' +
+            '<td data-label="Nama CS" class="py-3 px-4 font-semibold text-lotus-primary">' + escapeHtml(r.cs) + '</td>' +
+            '<td data-label="Total Resi" class="py-3 px-3.5 font-medium">' + r.total + '</td>' +
+            '<td data-label="Delivered" class="py-3 px-3.5 text-lotus-delivered font-semibold">' + r.delivered + '</td>' +
+            '<td data-label="Ongoing" class="py-3 px-3.5 text-lotus-gold font-semibold">' + r.ongoing + '</td>' +
+            '<td data-label="Retur" class="py-3 px-3.5 text-lotus-retur font-bold">' + r.retur + '</td>' +
+            '<td data-label="% Retur / Order CS" class="py-3 px-3.5">' + pctOwn + '%</td>' +
+            '<td data-label="% Retur / All Order" class="py-3 px-3.5">' + pctAllOrder + '%</td>' +
+            '<td data-label="% Sumbangan Retur" class="py-3 px-4 font-semibold text-lotus-accent">' + pctShareRetur + '%</td>' +
           '</tr>'
         );
       }).join('') : '<tr><td colspan="8" class="py-6 px-4 text-center text-lotus-muted">Belum ada data pada periode ini.</td></tr>';
@@ -1501,13 +1576,13 @@
           var rateRetur = s.total ? ((s.retur / s.total) * 100).toFixed(1) : '0.0';
           return (
             '<tr class="zebra-row">' +
-              '<td class="py-3 px-4 font-semibold text-lotus-primary">' + reg + '</td>' +
-              '<td class="py-3 px-3.5 font-medium">' + s.total + '</td>' +
-              '<td class="py-3 px-3.5">' + shareOrder + '%</td>' +
-              '<td class="py-3 px-3.5 text-lotus-delivered">' + s.delivered + '</td>' +
-              '<td class="py-3 px-3.5 text-lotus-gold">' + s.ongoing + '</td>' +
-              '<td class="py-3 px-3.5 text-lotus-retur font-bold">' + s.retur + '</td>' +
-              '<td class="py-3 px-4">' + rateRetur + '%</td>' +
+              '<td data-label="Wilayah" class="py-3 px-4 font-semibold text-lotus-primary">' + reg + '</td>' +
+              '<td data-label="Total Order" class="py-3 px-3.5 font-medium">' + s.total + '</td>' +
+              '<td data-label="% Porsi Order" class="py-3 px-3.5">' + shareOrder + '%</td>' +
+              '<td data-label="Delivered" class="py-3 px-3.5 text-lotus-delivered">' + s.delivered + '</td>' +
+              '<td data-label="Ongoing" class="py-3 px-3.5 text-lotus-gold">' + s.ongoing + '</td>' +
+              '<td data-label="Retur" class="py-3 px-3.5 text-lotus-retur font-bold">' + s.retur + '</td>' +
+              '<td data-label="% Retur Wilayah" class="py-3 px-4">' + rateRetur + '%</td>' +
             '</tr>'
           );
         }).join('');
@@ -1539,15 +1614,15 @@
         var pct = scopedReturs.length ? ((r.total / scopedReturs.length) * 100).toFixed(1) : '0.0';
         return (
           '<tr class="zebra-row">' +
-            '<td class="py-3 px-4 font-semibold text-lotus-primary">' + escapeHtml(r.reason) + '</td>' +
-            '<td class="py-3 px-3 font-bold text-lotus-retur">' + r.total + '</td>' +
-            '<td class="py-3 px-3">' + pct + '%</td>' +
-            '<td class="py-3 px-3">' + r.Jawa + '</td>' +
-            '<td class="py-3 px-3">' + r.Sumatra + '</td>' +
-            '<td class="py-3 px-3">' + r.Kalimantan + '</td>' +
-            '<td class="py-3 px-3">' + r.Sulawesi + '</td>' +
-            '<td class="py-3 px-3">' + r['Sunda Kecil'] + '</td>' +
-            '<td class="py-3 px-4">' + r['Indonesia Timur'] + '</td>' +
+            '<td data-label="Alasan Retur" class="py-3 px-4 font-semibold text-lotus-primary">' + escapeHtml(r.reason) + '</td>' +
+            '<td data-label="Total" class="py-3 px-3 font-bold text-lotus-retur">' + r.total + '</td>' +
+            '<td data-label="% Retur" class="py-3 px-3">' + pct + '%</td>' +
+            '<td data-label="Jawa" class="py-3 px-3">' + r.Jawa + '</td>' +
+            '<td data-label="Sumatra" class="py-3 px-3">' + r.Sumatra + '</td>' +
+            '<td data-label="Kalimantan" class="py-3 px-3">' + r.Kalimantan + '</td>' +
+            '<td data-label="Sulawesi" class="py-3 px-3">' + r.Sulawesi + '</td>' +
+            '<td data-label="Sunda Kecil" class="py-3 px-3">' + r['Sunda Kecil'] + '</td>' +
+            '<td data-label="Indonesia Timur" class="py-3 px-4">' + r['Indonesia Timur'] + '</td>' +
           '</tr>'
         );
       }).join('') : '<tr><td colspan="9" class="py-6 px-4 text-center text-lotus-muted">Belum ada data retur pada periode ini.</td></tr>';
@@ -1574,10 +1649,13 @@
         },
         options: {
           responsive: true,
-          plugins: { legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans' } } } },
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 }, boxWidth: 12 } }
+          },
           scales: {
-            x: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } },
-            y: { stacked: true, beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }
+            x: { stacked: true, ticks: { color: textColor, font: { size: 11 } }, grid: { color: gridColor } },
+            y: { stacked: true, beginAtZero: true, ticks: { color: textColor, font: { size: 11 } }, grid: { color: gridColor } }
           }
         }
       });
@@ -1596,8 +1674,12 @@
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } } }
+            legend: {
+              position: 'bottom',
+              labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 10.5 }, boxWidth: 11, padding: 10 }
+            }
           }
         }
       });
