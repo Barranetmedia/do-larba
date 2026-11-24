@@ -1,0 +1,1838 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>larba. — Monitor Barranetmedia</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!-- Chart.js untuk Grafik CS Corner -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Early Theme Restoration -->
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem('larba_theme_mode');
+        if (savedTheme === 'light') {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    :root {
+      --bg-base: #0C0918;
+      --text-primary: #F7F5FC;
+      --text-secondary: #A9A0C4;
+      --text-muted: #746A94;
+
+      --accent-primary: #8B96F2;
+      --accent-secondary: #B78EF5;
+      --accent-purple-dot: #A855F7;
+      --accent-gold: #F6C856;
+      --accent-gold-ring: rgba(246, 200, 86, 0.34);
+      --accent-delivered: #6EE7B7;
+      --accent-retur: #FDA4AF;
+
+      --cta-gradient: linear-gradient(135deg, #7884E8, #B78EF5);
+      --cta-text: #0C0918;
+      --cta-shadow: 0 8px 24px -6px rgba(155, 132, 242, 0.45);
+      --cta-shadow-hover: 0 10px 28px -4px rgba(183, 142, 245, 0.6);
+
+      --route-gradient: linear-gradient(90deg, #7884E8 0%, #B78EF5 55%, #F6C856 100%);
+      --route-track: rgba(227, 186, 245, 0.14);
+
+      --hairline: rgba(227, 186, 245, 0.11);
+      --zebra-alt: rgba(183, 142, 245, 0.045);
+      --zebra-hover: rgba(183, 142, 245, 0.085);
+
+      --pill-bg: rgba(255, 255, 255, 0.045);
+      --pill-bg-hover: rgba(255, 255, 255, 0.085);
+      --pill-border: rgba(227, 186, 245, 0.14);
+
+      --search-line: rgba(227, 186, 245, 0.18);
+      --search-focus: #B78EF5;
+
+      --timeline-line: linear-gradient(180deg, rgba(246, 200, 86, 0.5) 0%, rgba(183, 142, 245, 0.32) 48%, rgba(120, 132, 232, 0.10) 100%);
+      --timeline-dot-past: #8B96F2;
+
+      --shimmer-base: rgba(227, 186, 245, 0.05);
+      --shimmer-highlight: rgba(183, 142, 245, 0.14);
+
+      --overlay-bg: rgba(6, 4, 13, 0.74);
+      --sheet-bg: linear-gradient(180deg, rgba(23, 18, 48, 0.96) 0%, rgba(12, 9, 24, 0.99) 100%);
+      --sheet-shadow: 0 -20px 60px rgba(6, 4, 13, 0.85);
+      --toast-bg: rgba(24, 18, 52, 0.95);
+      --toast-shadow: 0 12px 32px rgba(6, 4, 13, 0.72);
+    }
+
+    html.light {
+      --bg-base: #FAF8FD;
+      --text-primary: #141026;
+      --text-secondary: #595175;
+      --text-muted: #8B81A8;
+
+      --accent-primary: #5663D1;
+      --accent-secondary: #8C63DF;
+      --accent-purple-dot: #7E22CE;
+      --accent-gold: #D98A1C;
+      --accent-gold-ring: rgba(217, 138, 28, 0.28);
+      --accent-delivered: #0D9488;
+      --accent-retur: #E11D48;
+
+      --cta-gradient: linear-gradient(135deg, #5663D1, #8C63DF);
+      --cta-text: #FFFFFF;
+      --cta-shadow: 0 8px 22px -6px rgba(86, 99, 209, 0.36);
+      --cta-shadow-hover: 0 10px 26px -4px rgba(140, 99, 223, 0.48);
+
+      --route-gradient: linear-gradient(90deg, #5663D1 0%, #936CE8 55%, #D98A1C 100%);
+      --route-track: rgba(20, 16, 38, 0.09);
+
+      --hairline: rgba(20, 16, 38, 0.08);
+      --zebra-alt: rgba(86, 99, 209, 0.04);
+      --zebra-hover: rgba(86, 99, 209, 0.075);
+
+      --pill-bg: rgba(20, 16, 38, 0.035);
+      --pill-bg-hover: rgba(20, 16, 38, 0.07);
+      --pill-border: rgba(20, 16, 38, 0.09);
+
+      --search-line: rgba(20, 16, 38, 0.14);
+      --search-focus: #5663D1;
+
+      --timeline-line: linear-gradient(180deg, rgba(217, 138, 28, 0.45) 0%, rgba(140, 99, 223, 0.28) 50%, rgba(86, 99, 209, 0.10) 100%);
+      --timeline-dot-past: #8C63DF;
+
+      --shimmer-base: rgba(20, 16, 38, 0.045);
+      --shimmer-highlight: rgba(86, 99, 209, 0.11);
+
+      --overlay-bg: rgba(20, 16, 38, 0.32);
+      --sheet-bg: linear-gradient(180deg, rgba(252, 250, 255, 0.96) 0%, rgba(243, 238, 249, 0.99) 100%);
+      --sheet-shadow: 0 -18px 50px rgba(20, 16, 38, 0.14);
+      --toast-bg: rgba(255, 255, 255, 0.96);
+      --toast-shadow: 0 12px 30px rgba(20, 16, 38, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100dvh;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    .atmosphere-dark {
+      background-color: #0C0918;
+      background-image:
+        radial-gradient(ellipse 64% 42% at 20% 10%, rgba(111, 124, 230, 0.22) 0%, rgba(111, 124, 230, 0) 76%),
+        radial-gradient(ellipse 56% 36% at 55% -4%, rgba(155, 132, 242, 0.16) 0%, rgba(155, 132, 242, 0) 74%),
+        radial-gradient(ellipse 48% 32% at 82% 8%, rgba(223, 183, 242, 0.11) 0%, rgba(223, 183, 242, 0) 72%),
+        linear-gradient(180deg, #15102B 0%, #0F0B21 40%, #0C0918 100%);
+      opacity: 1;
+      transition: opacity 0.35s ease;
+    }
+
+    html.light .atmosphere-dark {
+      opacity: 0;
+    }
+
+    .atmosphere-light {
+      background-color: #FAF8FD;
+      background-image:
+        radial-gradient(ellipse 64% 44% at 20% 8%, rgba(111, 124, 230, 0.11) 0%, rgba(111, 124, 230, 0) 76%),
+        radial-gradient(ellipse 54% 38% at 78% 6%, rgba(196, 152, 235, 0.15) 0%, rgba(196, 152, 235, 0) 74%),
+        linear-gradient(180deg, #F3EEF9 0%, #F7F4FC 42%, #FAF8FD 100%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    html.light .atmosphere-light {
+      opacity: 1;
+    }
+
+    .editorial-heading {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+    }
+
+    .text-lotus-primary { color: var(--text-primary); }
+    .text-lotus-secondary { color: var(--text-secondary); }
+    .text-lotus-muted { color: var(--text-muted); }
+    .text-lotus-accent { color: var(--accent-primary); }
+    .text-lotus-gold { color: var(--accent-gold); }
+    .text-lotus-delivered { color: var(--accent-delivered); }
+    .text-lotus-retur { color: var(--accent-retur); }
+
+    .lotus-pill {
+      background-color: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      transition: background-color 0.25s ease, border-color 0.35s ease, color 0.35s ease;
+    }
+
+    .lotus-pill:hover {
+      background-color: var(--pill-bg-hover);
+    }
+
+    .lotus-tab-active {
+      background: var(--cta-gradient);
+      color: var(--cta-text);
+      border: 1px solid transparent;
+      box-shadow: var(--cta-shadow);
+    }
+
+    .lotus-divider {
+      border: 0;
+      border-top: 1px solid var(--hairline);
+    }
+
+    .lotus-cta-btn {
+      background: var(--cta-gradient);
+      color: var(--cta-text);
+      box-shadow: var(--cta-shadow);
+      transition: transform 0.18s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    }
+
+    .lotus-cta-btn:hover:not(:disabled) {
+      filter: brightness(1.05);
+      box-shadow: var(--cta-shadow-hover);
+    }
+
+    .lotus-cta-btn:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+
+    .lotus-cta-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .search-underline {
+      border-bottom: 1px solid var(--search-line);
+      transition: border-color 0.3s ease;
+    }
+
+    .search-underline:focus-within {
+      border-bottom-color: var(--search-focus);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--text-muted);
+      opacity: 0.85;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.7);
+      cursor: pointer;
+    }
+    html.light input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: none;
+    }
+
+    select option {
+      background-color: #171230;
+      color: #F7F5FC;
+    }
+    html.light select option {
+      background-color: #FAF8FD;
+      color: #141026;
+    }
+
+    .zebra-row {
+      transition: background-color 0.2s ease;
+    }
+    .zebra-row:nth-child(even) {
+      background-color: var(--zebra-alt);
+    }
+    .zebra-row:hover {
+      background-color: var(--zebra-hover);
+    }
+
+    .literal-attention-box {
+      border: 1px solid var(--pill-border);
+      background-color: var(--pill-bg);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    .literal-box-risk {
+      border-color: rgba(246, 200, 86, 0.32);
+    }
+    .literal-box-retur {
+      border-color: rgba(253, 164, 175, 0.32);
+    }
+
+    @keyframes goldRadarPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 var(--accent-gold-ring);
+      }
+      50% {
+        transform: scale(1.18);
+        box-shadow: 0 0 0 6px rgba(246, 200, 86, 0);
+      }
+    }
+
+    .radar-pulse-dot {
+      background-color: var(--accent-gold);
+      animation: goldRadarPulse 2.6s ease-in-out infinite;
+    }
+
+    .route-track-bg {
+      background-color: var(--route-track);
+    }
+
+    .route-progress-beam {
+      background: var(--route-gradient);
+    }
+
+    .route-comet-dot {
+      background-color: var(--accent-gold);
+      box-shadow: 0 0 10px 2px var(--accent-gold-ring), 0 0 4px 1px var(--accent-gold);
+    }
+
+    .timeline-vertical-line {
+      background: var(--timeline-line);
+    }
+
+    @keyframes checkpointHalo {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 4px var(--accent-gold-ring), 0 0 12px var(--accent-gold-ring);
+      }
+      50% {
+        transform: scale(1.14);
+        box-shadow: 0 0 0 8px rgba(246, 200, 86, 0), 0 0 16px var(--accent-gold-ring);
+      }
+    }
+
+    .timeline-active-node {
+      background-color: var(--accent-gold);
+      animation: checkpointHalo 2.5s ease-in-out infinite;
+    }
+
+    .timeline-past-node {
+      background-color: var(--timeline-dot-past);
+    }
+
+    @keyframes lotusShimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .shimmer-bar {
+      background: linear-gradient(
+        90deg,
+        var(--shimmer-base) 25%,
+        var(--shimmer-highlight) 50%,
+        var(--shimmer-base) 75%
+      );
+      background-size: 200% 100%;
+      animation: lotusShimmer 1.1s ease-in-out infinite;
+    }
+
+    .drawer-overlay {
+      background-color: var(--overlay-bg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+
+    .drawer-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-sheet {
+      background: var(--sheet-bg);
+      border-top: 1px solid var(--pill-border);
+      box-shadow: var(--sheet-shadow);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .drawer-overlay.is-open .drawer-sheet {
+      transform: translateY(0);
+    }
+
+    .lotus-toast {
+      background-color: var(--toast-bg);
+      border: 1px solid var(--pill-border);
+      box-shadow: var(--toast-shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="relative min-h-[100dvh] selection:bg-[#8B96F2]/25">
+
+  <div class="atmosphere-dark fixed inset-0 pointer-events-none z-0" aria-hidden="true"></div>
+  <div class="atmosphere-light fixed inset-0 pointer-events-none z-0" aria-hidden="true"></div>
+
+  <div class="relative z-10 w-full max-w-[1080px] mx-auto px-5 sm:px-8 pt-8 pb-24">
+
+    <!-- Header -->
+    <header class="flex flex-wrap items-center justify-between gap-3 pb-6 mb-8 border-b border-[var(--hairline)]">
+      <div class="flex items-center gap-4">
+        <button
+          id="brandResetBtn"
+          type="button"
+          class="inline-flex items-baseline focus:outline-none cursor-pointer"
+          aria-label="larba."
+        >
+          <span class="editorial-heading text-[26px] text-lotus-primary leading-none">larba</span>
+          <span style="color: var(--accent-purple-dot);" class="editorial-heading text-[28px] leading-none">.</span>
+        </button>
+
+        <nav id="mainNavTabs" class="hidden items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <button
+            type="button"
+            data-tab="tabAttention"
+            class="nav-tab-btn lotus-tab-active inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-semibold cursor-pointer whitespace-nowrap"
+          >
+            <span>Needs Your Attention</span>
+            <span id="attentionNavBadge" class="px-1.5 py-0.2 rounded-full text-[10.5px] font-bold bg-[#FDA4AF]/20 text-lotus-retur">0</span>
+          </button>
+          <button
+            type="button"
+            data-tab="tabCorner"
+            class="nav-tab-btn lotus-pill px-3.5 py-1.5 rounded-full text-[12px] font-medium text-lotus-primary cursor-pointer whitespace-nowrap"
+          >
+            CS Corner
+          </button>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          id="syncDataBtn"
+          type="button"
+          title="Muat ulang data dari Google Sheets"
+          class="lotus-pill hidden items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] font-medium text-lotus-secondary hover:text-lotus-primary cursor-pointer"
+        >
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path>
+            <path d="M16 16h5v5"></path>
+          </svg>
+          <span id="syncBtnLabel" class="hidden sm:inline">Sinkron</span>
+        </button>
+
+        <button
+          id="themeToggleBtn"
+          type="button"
+          class="lotus-pill inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium text-lotus-primary cursor-pointer"
+        >
+          <svg id="iconSun" class="w-3.5 h-3.5 text-lotus-gold shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2m-7.07-17.07 1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <svg id="iconMoon" class="hidden w-3.5 h-3.5 text-lotus-accent shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+          <span id="themeToggleLabel">Mode Terang</span>
+        </button>
+
+        <div id="authBadgePill" class="lotus-pill hidden items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium text-lotus-secondary">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#6EE7B7]"></span>
+          <span>Barranetmedia</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- GERBANG LOGIN GOOGLE -->
+    <div id="loginPanel" class="max-w-[440px] mx-auto py-12">
+      <div class="lotus-pill inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4">
+        <span class="w-1.5 h-1.5 rounded-full radar-pulse-dot shrink-0"></span>
+        <span class="font-sans text-[11px] font-semibold tracking-[0.06em] uppercase text-lotus-primary">
+          Rahasia Perusahaan
+        </span>
+      </div>
+
+      <h1 class="editorial-heading text-[28px] sm:text-[32px] text-lotus-primary mb-2">
+        Monitor Barranetmedia
+      </h1>
+      <p class="text-[14px] leading-relaxed text-lotus-secondary mb-7">
+        Selamat berjuang sukses...
+      </p>
+
+      <div class="pt-5 border-t border-[var(--hairline)]">
+        <p class="text-[13.5px] font-semibold text-lotus-primary mb-1">Login Akun Google</p>
+        <p class="text-[12.5px] text-lotus-secondary mb-4">
+          Gunakan email Google yang terdaftar untuk mengakses data resi &amp; laporan CS.
+        </p>
+        <div id="googleSignInBtn"></div>
+        <p id="loginStatus" class="font-sans text-[12px] font-medium text-lotus-gold mt-3.5"></p>
+      </div>
+    </div>
+
+    <!-- TAB 1: NEEDS YOUR ATTENTION -->
+    <div id="tabAttention" class="app-tab-view hidden">
+      <div class="flex flex-wrap items-end justify-between gap-4 pb-6 mb-7 border-b border-[var(--hairline)]">
+        <div>
+          <h1 class="editorial-heading text-[24px] sm:text-[28px] text-lotus-primary">
+            Needs Your Attention
+          </h1>
+          <p class="text-[13px] text-lotus-secondary mt-1">
+            Tindak lanjut pesanan berisiko dan kelengkapan bukti retur pelanggan.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="search-underline pb-1.5 min-w-[160px]">
+            <label for="attCsFilter" class="block font-sans text-[10.5px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Filter Nama CS</label>
+            <select id="attCsFilter" class="w-full bg-transparent text-[13px] font-semibold text-lotus-primary focus:outline-none cursor-pointer">
+              <option value="ALL">Semua CS</option>
+            </select>
+          </div>
+
+          <button
+            id="btnCheckSpxRisk"
+            type="button"
+            class="lotus-pill inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-semibold text-lotus-accent hover:text-lotus-primary cursor-pointer"
+          >
+            <span class="w-1.5 h-1.5 rounded-full radar-pulse-dot"></span>
+            <span id="btnCheckSpxLabel">Cek Gagal Antar Live SPX</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <section class="literal-attention-box literal-box-risk">
+          <div class="px-5 py-3.5 border-b border-[var(--hairline)] flex items-center justify-between gap-2 bg-[#F6C856]/10">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#F6C856]"></span>
+              <h2 class="text-[14px] font-bold tracking-wide uppercase text-lotus-gold">Berisiko</h2>
+            </div>
+            <span id="riskCountBadge" class="px-2.5 py-0.5 rounded-full text-[12px] font-bold bg-[#F6C856]/20 text-lotus-gold">0</span>
+          </div>
+          <div id="riskListBody" class="divide-y divide-[var(--hairline)] max-h-[72vh] overflow-y-auto"></div>
+        </section>
+
+        <section class="literal-attention-box literal-box-retur">
+          <div class="px-5 py-3.5 border-b border-[var(--hairline)] flex items-center justify-between gap-2 bg-[#FDA4AF]/10">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#FDA4AF]"></span>
+              <h2 class="text-[14px] font-bold tracking-wide uppercase text-lotus-retur">Retur</h2>
+            </div>
+            <span id="returCountBadge" class="px-2.5 py-0.5 rounded-full text-[12px] font-bold bg-[#FDA4AF]/20 text-lotus-retur">0</span>
+          </div>
+          <div id="returListBody" class="divide-y divide-[var(--hairline)] max-h-[72vh] overflow-y-auto"></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- TAB 2: CS CORNER -->
+    <div id="tabCorner" class="app-tab-view hidden">
+      <div class="flex flex-wrap items-end justify-between gap-4 pb-6 mb-7 border-b border-[var(--hairline)]">
+        <div>
+          <h1 class="editorial-heading text-[24px] sm:text-[28px] text-lotus-primary">
+            CS Corner
+          </h1>
+          <p class="text-[13px] text-lotus-secondary mt-1">
+            Ringkasan performa CS, persentase retur, distribusi area, dan alasan retur.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-end gap-4">
+          <div class="search-underline pb-1.5">
+            <label for="cornerDateFrom" class="block font-sans text-[10.5px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Dari Tanggal</label>
+            <input type="date" id="cornerDateFrom" class="bg-transparent text-[12.5px] font-semibold text-lotus-primary focus:outline-none" />
+          </div>
+
+          <div class="search-underline pb-1.5">
+            <label for="cornerDateTo" class="block font-sans text-[10.5px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Sampai Tanggal</label>
+            <input type="date" id="cornerDateTo" class="bg-transparent text-[12.5px] font-semibold text-lotus-primary focus:outline-none" />
+          </div>
+
+          <div class="search-underline pb-1.5 min-w-[140px]">
+            <label for="cornerCsFilter" class="block font-sans text-[10.5px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Filter CS</label>
+            <select id="cornerCsFilter" class="w-full bg-transparent text-[12.5px] font-semibold text-lotus-primary focus:outline-none cursor-pointer">
+              <option value="ALL">Semua CS</option>
+            </select>
+          </div>
+
+          <button id="btnActiveMonth" type="button" class="lotus-pill px-3.5 py-2 rounded-full text-[12px] font-medium text-lotus-primary cursor-pointer">
+            Bulan Aktif
+          </button>
+        </div>
+      </div>
+
+      <section class="mb-9">
+        <h2 class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-lotus-secondary mb-3">
+          1. Ringkasan Per CS &amp; Persentase Retur
+        </h2>
+        <div class="overflow-x-auto rounded-xl border border-[var(--hairline)]">
+          <table id="csSummaryTable" class="w-full text-left border-collapse text-[13px]">
+            <thead>
+              <tr class="border-b border-[var(--hairline)] bg-[var(--pill-bg)] text-[11.5px] uppercase tracking-wider text-lotus-secondary">
+                <th class="py-3 px-4 font-semibold">Nama CS</th>
+                <th class="py-3 px-3.5 font-semibold">Total Resi</th>
+                <th class="py-3 px-3.5 font-semibold">Delivered</th>
+                <th class="py-3 px-3.5 font-semibold">Ongoing</th>
+                <th class="py-3 px-3.5 font-semibold">Retur</th>
+                <th class="py-3 px-3.5 font-semibold">% Retur / Order CS</th>
+                <th class="py-3 px-3.5 font-semibold">% Retur / All Order</th>
+                <th class="py-3 px-4 font-semibold">% Sumbangan Retur</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--hairline)]"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-9">
+        <div class="p-5 rounded-2xl border border-[var(--hairline)] bg-[var(--pill-bg)]">
+          <h3 class="text-[13px] font-bold text-lotus-primary mb-3">Proporsi Status Order per CS</h3>
+          <canvas id="chartCsStatus" height="195"></canvas>
+        </div>
+        <div class="p-5 rounded-2xl border border-[var(--hairline)] bg-[var(--pill-bg)]">
+          <h3 class="text-[13px] font-bold text-lotus-primary mb-3">Distribusi Alasan Retur</h3>
+          <canvas id="chartReturReason" height="195"></canvas>
+        </div>
+      </section>
+
+      <section class="mb-9">
+        <h2 class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-lotus-secondary mb-3">
+          2. Breakdown Distribusi Area Order &amp; Retur (6 Wilayah)
+        </h2>
+        <div class="overflow-x-auto rounded-xl border border-[var(--hairline)]">
+          <table id="regionBreakdownTable" class="w-full text-left border-collapse text-[13px]">
+            <thead>
+              <tr class="border-b border-[var(--hairline)] bg-[var(--pill-bg)] text-[11.5px] uppercase tracking-wider text-lotus-secondary">
+                <th class="py-3 px-4 font-semibold">Wilayah</th>
+                <th class="py-3 px-3.5 font-semibold">Total Order</th>
+                <th class="py-3 px-3.5 font-semibold">% Porsi Order</th>
+                <th class="py-3 px-3.5 font-semibold">Delivered</th>
+                <th class="py-3 px-3.5 font-semibold">Ongoing</th>
+                <th class="py-3 px-3.5 font-semibold">Retur</th>
+                <th class="py-3 px-4 font-semibold">% Retur Wilayah</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--hairline)]"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="font-sans text-[12px] font-semibold uppercase tracking-[0.08em] text-lotus-secondary mb-3">
+          3. Breakdown Alasan Retur (Keseluruhan &amp; Tiap Daerah)
+        </h2>
+        <div class="overflow-x-auto rounded-xl border border-[var(--hairline)]">
+          <table id="reasonByRegionTable" class="w-full text-left border-collapse text-[13px]">
+            <thead>
+              <tr class="border-b border-[var(--hairline)] bg-[var(--pill-bg)] text-[11.5px] uppercase tracking-wider text-lotus-secondary">
+                <th class="py-3 px-4 font-semibold">Alasan Retur</th>
+                <th class="py-3 px-3 font-semibold">Total</th>
+                <th class="py-3 px-3 font-semibold">% Retur</th>
+                <th class="py-3 px-3 font-semibold">Jawa</th>
+                <th class="py-3 px-3 font-semibold">Sumatra</th>
+                <th class="py-3 px-3 font-semibold">Kalimantan</th>
+                <th class="py-3 px-3 font-semibold">Sulawesi</th>
+                <th class="py-3 px-3 font-semibold">Sunda Kecil</th>
+                <th class="py-3 px-4 font-semibold">Indonesia Timur</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[var(--hairline)]"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+  </div>
+
+  <!-- SLIDE-UP FROSTED BOTTOM SHEET (LIVE SPX TRACKING) -->
+  <div
+    id="trackDrawerOverlay"
+    aria-hidden="true"
+    class="drawer-overlay fixed inset-0 z-50 backdrop-blur-sm flex flex-col justify-end items-center"
+  >
+    <div id="drawerBackdrop" class="w-full flex-1"></div>
+
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Detail Perjalanan Paket"
+      class="drawer-sheet w-full max-w-[580px] max-h-[86vh] rounded-t-3xl px-6 pt-4 pb-10 flex flex-col"
+    >
+      <div style="background-color: var(--hairline);" class="w-10 h-1 rounded-full mx-auto mb-5 shrink-0"></div>
+
+      <div style="border-bottom: 1px solid var(--hairline);" class="flex items-center justify-between gap-3 pb-4 shrink-0">
+        <div class="inline-flex items-center gap-2 flex-wrap">
+          <span class="text-[13px] font-semibold text-lotus-accent">SPX Express</span>
+          <span class="text-lotus-muted">&middot;</span>
+          <span id="drawerResiCode" class="font-sans text-[14px] font-semibold text-lotus-primary tracking-wide">-</span>
+          <button
+            id="drawerCopyBtn"
+            type="button"
+            class="inline-flex items-center gap-1 text-[11.5px] font-medium text-lotus-secondary hover:text-lotus-primary transition-colors cursor-pointer ml-1"
+          >
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="drawerCopyLabel">Salin</span>
+          </button>
+        </div>
+
+        <button
+          id="closeDrawerBtn"
+          type="button"
+          class="lotus-pill text-[12px] font-medium text-lotus-secondary hover:text-lotus-primary px-3 py-1 rounded-full cursor-pointer"
+        >
+          Tutup
+        </button>
+      </div>
+
+      <div id="drawerBody" class="overflow-y-auto pt-6 pr-1"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: INPUT FEEDBACK BERISIKO -->
+  <div id="feedbackModalOverlay" aria-hidden="true" class="drawer-overlay fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="drawer-sheet w-full max-w-[460px] rounded-2xl p-6 border border-[var(--pill-border)]" style="transform:none;">
+      <div class="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-[var(--hairline)]">
+        <h3 id="fbModalTitle" class="text-[15px] font-bold text-lotus-primary">Input Feedback Berisiko</h3>
+        <button type="button" onclick="closeActionModal('feedbackModalOverlay')" class="lotus-pill px-3 py-1 rounded-full text-[12px] text-lotus-secondary cursor-pointer">Tutup</button>
+      </div>
+      <input type="hidden" id="fbResiInput" />
+      <div class="mb-4">
+        <label for="fbTextInput" class="block text-[12px] font-semibold text-lotus-secondary mb-1.5">Feedback Customer (Wajib)</label>
+        <textarea id="fbTextInput" rows="3" placeholder="Tulis hasil konfirmasi dari customer..." class="w-full rounded-xl p-3 bg-[var(--pill-bg)] border border-[var(--pill-border)] text-[13.5px] text-lotus-primary focus:outline-none focus:border-[var(--search-focus)]"></textarea>
+      </div>
+      <div class="flex flex-wrap justify-end gap-2.5">
+        <button type="button" id="btnSaveFbOnly" onclick="submitFeedbackBerisiko(false)" class="lotus-pill px-4 py-2 rounded-full text-[12.5px] font-semibold text-lotus-primary cursor-pointer">
+          Simpan Saja
+        </button>
+        <button type="button" id="btnSaveFbWa" onclick="submitFeedbackBerisiko(true)" class="lotus-cta-btn px-4 py-2 rounded-full text-[12.5px] font-bold cursor-pointer">
+          Simpan &amp; Kirim WA
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: INPUT DETAIL RETUR -->
+  <div id="returModalOverlay" aria-hidden="true" class="drawer-overlay fixed inset-0 z-50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="drawer-sheet w-full max-w-[480px] max-h-[90vh] overflow-y-auto rounded-2xl p-6 border border-[var(--pill-border)]" style="transform:none;">
+      <div class="flex items-center justify-between gap-2 pb-3 mb-4 border-b border-[var(--hairline)]">
+        <h3 id="returModalTitle" class="text-[15px] font-bold text-lotus-primary">Lengkapi Data Retur</h3>
+        <button type="button" onclick="closeActionModal('returModalOverlay')" class="lotus-pill px-3 py-1 rounded-full text-[12px] text-lotus-secondary cursor-pointer">Tutup</button>
+      </div>
+      <input type="hidden" id="returResiInput" />
+
+      <div class="mb-4">
+        <label for="returAlasanInput" class="block text-[12px] font-semibold text-lotus-secondary mb-1.5">1. Alasan Retur (Wajib)</label>
+        <select id="returAlasanInput" class="w-full rounded-xl p-3 bg-[var(--pill-bg)] border border-[var(--pill-border)] text-[13px] text-lotus-primary focus:outline-none focus:border-[var(--search-focus)]">
+          <option value="">-- Pilih Alasan Retur --</option>
+          <option value="Kurir tidak menghubungi penerima">Kurir tidak menghubungi penerima</option>
+          <option value="Misroute">Misroute</option>
+          <option value="buyer menolak ke pikup poin">buyer menolak ke pikup poin</option>
+          <option value="buyer menolak paket">buyer menolak paket</option>
+          <option value="kurir menolak mengantar paket">kurir menolak mengantar paket</option>
+          <option value="buyer no respon">buyer no respon</option>
+          <option value="kurir diblokir buyer">kurir diblokir buyer</option>
+          <option value="kendala ekspedisi">kendala ekspedisi</option>
+          <option value="buyer ndlogok">buyer ndlogok</option>
+          <option value="miskon kurir dan buyer">miskon kurir dan buyer</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="returCatatanInput" class="block text-[12px] font-semibold text-lotus-secondary mb-1.5">2. Catatan Detail (Wajib)</label>
+        <textarea id="returCatatanInput" rows="3" placeholder="Jelaskan kronologi / keterangan detail retur..." class="w-full rounded-xl p-3 bg-[var(--pill-bg)] border border-[var(--pill-border)] text-[13px] text-lotus-primary focus:outline-none focus:border-[var(--search-focus)]"></textarea>
+      </div>
+
+      <div class="mb-5">
+        <label for="returFotoInput" class="block text-[12px] font-semibold text-lotus-secondary mb-1.5">3. Foto Bukti Chat Cust (Wajib &bull; 1 Foto)</label>
+        <input type="file" id="returFotoInput" accept="image/*" class="w-full text-[12.5px] text-lotus-secondary file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[12px] file:font-semibold file:bg-[#8B96F2]/20 file:text-lotus-primary cursor-pointer" />
+      </div>
+
+      <div class="flex justify-end">
+        <button type="button" id="btnSubmitRetur" onclick="submitReturForm()" class="lotus-cta-btn px-5 py-2.5 rounded-full text-[13px] font-bold cursor-pointer">
+          Simpan &amp; Selesaikan Retur
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast -->
+  <div
+    id="toastBanner"
+    role="status"
+    aria-live="polite"
+    class="pointer-events-none fixed bottom-6 left-1/2 -translate-x-1/2 z-50 opacity-0 translate-y-2 transition-all duration-200"
+  >
+    <div class="lotus-toast inline-flex items-center gap-2 px-4 py-2 rounded-full text-[12.5px] font-medium text-lotus-primary whitespace-nowrap">
+      <span style="background-color: var(--accent-gold);" class="w-1.5 h-1.5 rounded-full"></span>
+      <span id="toastText">Nomor resi disalin</span>
+    </div>
+  </div>
+
+  <script>
+    var API_URL = "https://script.google.com/macros/s/AKfycbyZo8dEMfDcS84-WDwZiZeZS-WzdAwLOAyr_lU1TAovOZdW7PV0Qh338mhNJRDOKua1oA/exec";
+    var GOOGLE_CLIENT_ID = "315770296664-pkethfkpdhd9bqj1lnjj0ec06eos8rlv.apps.googleusercontent.com";
+    var SESSION_KEY = "larba_session_v1";
+
+    var SESSION_TOKEN = null;
+    try { SESSION_TOKEN = localStorage.getItem(SESSION_KEY); } catch (e) {}
+
+    var allOrders = [];
+    var csList = [];
+    var trackingCache = {};
+    var activeDrawerResi = "";
+    var toastTimer = null;
+    var chartStatusInstance = null;
+    var chartReasonInstance = null;
+
+    var el = {
+      brandResetBtn: document.getElementById('brandResetBtn'),
+      mainNavTabs: document.getElementById('mainNavTabs'),
+      attentionNavBadge: document.getElementById('attentionNavBadge'),
+      syncDataBtn: document.getElementById('syncDataBtn'),
+      syncBtnLabel: document.getElementById('syncBtnLabel'),
+
+      themeToggleBtn: document.getElementById('themeToggleBtn'),
+      themeToggleLabel: document.getElementById('themeToggleLabel'),
+      iconSun: document.getElementById('iconSun'),
+      iconMoon: document.getElementById('iconMoon'),
+      authBadgePill: document.getElementById('authBadgePill'),
+
+      loginPanel: document.getElementById('loginPanel'),
+      loginStatus: document.getElementById('loginStatus'),
+      tabAttention: document.getElementById('tabAttention'),
+
+      attCsFilter: document.getElementById('attCsFilter'),
+      btnCheckSpxRisk: document.getElementById('btnCheckSpxRisk'),
+      btnCheckSpxLabel: document.getElementById('btnCheckSpxLabel'),
+      riskCountBadge: document.getElementById('riskCountBadge'),
+      returCountBadge: document.getElementById('returCountBadge'),
+      riskListBody: document.getElementById('riskListBody'),
+      returListBody: document.getElementById('returListBody'),
+
+      cornerDateFrom: document.getElementById('cornerDateFrom'),
+      cornerDateTo: document.getElementById('cornerDateTo'),
+      cornerCsFilter: document.getElementById('cornerCsFilter'),
+      btnActiveMonth: document.getElementById('btnActiveMonth'),
+
+      trackDrawerOverlay: document.getElementById('trackDrawerOverlay'),
+      drawerBackdrop: document.getElementById('drawerBackdrop'),
+      closeDrawerBtn: document.getElementById('closeDrawerBtn'),
+      drawerResiCode: document.getElementById('drawerResiCode'),
+      drawerCopyBtn: document.getElementById('drawerCopyBtn'),
+      drawerCopyLabel: document.getElementById('drawerCopyLabel'),
+      drawerBody: document.getElementById('drawerBody'),
+
+      toastBanner: document.getElementById('toastBanner'),
+      toastText: document.getElementById('toastText')
+    };
+
+    /* 1. DUAL THEME SWITCHER */
+    function syncThemeUI() {
+      var isLight = document.documentElement.classList.contains('light');
+      if (isLight) {
+        el.iconSun.classList.add('hidden');
+        el.iconMoon.classList.remove('hidden');
+        el.themeToggleLabel.textContent = 'Mode Gelap';
+      } else {
+        el.iconMoon.classList.add('hidden');
+        el.iconSun.classList.remove('hidden');
+        el.themeToggleLabel.textContent = 'Mode Terang';
+      }
+    }
+
+    function toggleTheme() {
+      var root = document.documentElement;
+      var switchingToLight = !root.classList.contains('light');
+      if (switchingToLight) {
+        root.classList.remove('dark');
+        root.classList.add('light');
+      } else {
+        root.classList.remove('light');
+        root.classList.add('dark');
+      }
+      try {
+        localStorage.setItem('larba_theme_mode', switchingToLight ? 'light' : 'dark');
+      } catch (e) {}
+      syncThemeUI();
+      if (!document.getElementById('tabCorner').classList.contains('hidden')) {
+        renderCsCorner();
+      }
+      showToast(switchingToLight ? 'Beralih ke Mode Terang' : 'Beralih ke Mode Gelap');
+    }
+
+    el.themeToggleBtn.addEventListener('click', toggleTheme);
+    syncThemeUI();
+
+    function showToast(message) {
+      el.toastText.textContent = message;
+      el.toastBanner.classList.remove('opacity-0', 'translate-y-2');
+      el.toastBanner.classList.add('opacity-100', 'translate-y-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () {
+        el.toastBanner.classList.remove('opacity-100', 'translate-y-0');
+        el.toastBanner.classList.add('opacity-0', 'translate-y-2');
+      }, 2400);
+    }
+
+    function copyText(text) {
+      var temp = document.createElement('textarea');
+      temp.value = text;
+      temp.setAttribute('readonly', '');
+      temp.style.position = 'fixed';
+      temp.style.opacity = '0';
+      document.body.appendChild(temp);
+      temp.select();
+      try {
+        document.execCommand('copy');
+        showToast('Nomor resi disalin');
+      } catch (e) {
+        showToast('Gagal menyalin resi');
+      }
+      document.body.removeChild(temp);
+    }
+
+    /* 2. NAVIGATION & SESI LOGIN 30 HARI */
+    document.querySelectorAll('.nav-tab-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var targetId = btn.getAttribute('data-tab');
+        document.querySelectorAll('.app-tab-view').forEach(function (view) {
+          view.classList.add('hidden');
+        });
+        document.getElementById(targetId).classList.remove('hidden');
+
+        document.querySelectorAll('.nav-tab-btn').forEach(function (b) {
+          b.classList.remove('lotus-tab-active', 'font-semibold');
+          b.classList.add('lotus-pill', 'font-medium');
+        });
+        btn.classList.remove('lotus-pill', 'font-medium');
+        btn.classList.add('lotus-tab-active', 'font-semibold');
+
+        if (targetId === 'tabAttention') renderAttention();
+        if (targetId === 'tabCorner') renderCsCorner();
+      });
+    });
+
+    function clearSavedSession(reason) {
+      SESSION_TOKEN = null;
+      try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+      el.tabAttention.classList.add('hidden');
+      document.getElementById('tabCorner').classList.add('hidden');
+      el.mainNavTabs.classList.add('hidden');
+      el.mainNavTabs.classList.remove('flex');
+      el.syncDataBtn.classList.add('hidden');
+      el.syncDataBtn.classList.remove('inline-flex');
+      el.authBadgePill.classList.add('hidden');
+      el.loginPanel.style.display = '';
+      el.loginStatus.textContent = reason || '';
+      initGoogleAuthButton(0);
+    }
+
+    function revealAuthenticatedUI() {
+      el.loginPanel.style.display = 'none';
+      el.tabAttention.classList.remove('hidden');
+      el.mainNavTabs.classList.remove('hidden');
+      el.mainNavTabs.classList.add('flex');
+      el.syncDataBtn.classList.remove('hidden');
+      el.syncDataBtn.classList.add('inline-flex');
+      el.authBadgePill.classList.remove('hidden');
+      el.authBadgePill.classList.add('sm:inline-flex');
+    }
+
+    function initGoogleAuthButton(attempt) {
+      if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleSignIn,
+          auto_select: true
+        });
+        google.accounts.id.renderButton(
+          document.getElementById('googleSignInBtn'),
+          { theme: 'outline', size: 'large', text: 'signin_with', shape: 'pill' }
+        );
+        google.accounts.id.prompt();
+        return;
+      }
+      if (attempt < 25) {
+        setTimeout(function () { initGoogleAuthButton(attempt + 1); }, 300);
+      } else {
+        el.loginStatus.textContent = 'Gagal memuat tombol login Google. Matikan pemblokir iklan atau refresh halaman.';
+      }
+    }
+
+    window.onload = function () {
+      resetCornerActiveMonth(false);
+
+      // Jika sesi 30 hari masih tersimpan di browser, langsung muat data tanpa login ulang
+      if (SESSION_TOKEN) {
+        el.loginStatus.textContent = 'Memulihkan sesi & memuat data...';
+        jsonpRequest({ session: SESSION_TOKEN, action: 'getAll' }, function (err, data) {
+          if (err) {
+            el.loginStatus.textContent = 'Gagal terhubung: ' + err.message;
+            return;
+          }
+          if (data.authError || !data.success) {
+            clearSavedSession(data.error || 'Sesi kedaluwarsa, silakan login ulang.');
+            return;
+          }
+
+          allOrders = data.orders || [];
+          csList = data.csList || [];
+          populateCsOptions();
+          revealAuthenticatedUI();
+          renderAttention();
+          renderCsCorner();
+        });
+        return;
+      }
+
+      initGoogleAuthButton(0);
+    };
+
+    function jsonpRequest(params, callback) {
+      var callbackName = 'jsonp_cb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+      window[callbackName] = function (data) {
+        delete window[callbackName];
+        if (script.parentNode) document.body.removeChild(script);
+        callback(null, data);
+      };
+      var query = Object.keys(params).map(function (k) {
+        return k + '=' + encodeURIComponent(params[k]);
+      }).join('&');
+      var script = document.createElement('script');
+      script.src = API_URL + '?' + query + '&callback=' + callbackName;
+      script.onerror = function () {
+        delete window[callbackName];
+        if (script.parentNode) document.body.removeChild(script);
+        callback(new Error('Gagal memuat data dari server.'));
+      };
+      document.body.appendChild(script);
+    }
+
+    function postApi(payload) {
+      payload.session = SESSION_TOKEN;
+      return fetch(API_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (res) {
+          if (res && res.authError) {
+            clearSavedSession(res.error);
+          }
+          return res;
+        });
+    }
+
+    function handleGoogleSignIn(response) {
+      var idToken = response.credential;
+      el.loginStatus.textContent = 'Membuat sesi login 30 hari...';
+
+      // Tukar ID Token Google dengan Token Sesi 30 Hari
+      jsonpRequest({ token: idToken, action: 'login' }, function (err, loginData) {
+        if (err) {
+          el.loginStatus.textContent = 'Gagal terhubung: ' + err.message;
+          return;
+        }
+        if (!loginData.success) {
+          el.loginStatus.textContent = loginData.error;
+          return;
+        }
+
+        SESSION_TOKEN = loginData.session;
+        try { localStorage.setItem(SESSION_KEY, SESSION_TOKEN); } catch (e) {}
+
+        el.loginStatus.textContent = 'Memuat data...';
+        jsonpRequest({ session: SESSION_TOKEN, action: 'getAll' }, function (err2, data) {
+          if (err2) {
+            el.loginStatus.textContent = 'Gagal terhubung: ' + err2.message;
+            return;
+          }
+          if (!data.success) {
+            clearSavedSession(data.error);
+            return;
+          }
+
+          allOrders = data.orders || [];
+          csList = data.csList || [];
+          populateCsOptions();
+          revealAuthenticatedUI();
+          renderAttention();
+          renderCsCorner();
+        });
+      });
+    }
+
+    function reloadAllOrders(forceRefresh) {
+      if (!SESSION_TOKEN) return;
+      el.syncBtnLabel.textContent = 'Memuat...';
+      el.syncDataBtn.disabled = true;
+
+      jsonpRequest({ session: SESSION_TOKEN, action: 'getAll', force: forceRefresh ? '1' : '0' }, function (err, data) {
+        el.syncBtnLabel.textContent = 'Sinkron';
+        el.syncDataBtn.disabled = false;
+
+        if (data && data.authError) {
+          clearSavedSession(data.error);
+          return;
+        }
+        if (err || !data || !data.success) {
+          showToast((err && err.message) || (data && data.error) || 'Gagal menyinkronkan data');
+          return;
+        }
+
+        allOrders = data.orders || [];
+        csList = data.csList || [];
+        populateCsOptions();
+        renderAttention();
+        renderCsCorner();
+        showToast('Data berhasil diperbarui');
+      });
+    }
+
+    el.syncDataBtn.addEventListener('click', function () {
+      reloadAllOrders(true);
+    });
+
+    function populateCsOptions() {
+      [el.attCsFilter, el.cornerCsFilter].forEach(function (sel) {
+        var prev = sel.value;
+        sel.innerHTML = '<option value="ALL">Semua CS</option>' + csList.map(function (c) {
+          return '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>';
+        }).join('');
+        if (csList.indexOf(prev) !== -1) sel.value = prev;
+      });
+    }
+
+    /* 3. TAB 1: NEEDS YOUR ATTENTION */
+    el.attCsFilter.addEventListener('change', renderAttention);
+
+    function renderAttention() {
+      var selectedCs = el.attCsFilter.value;
+      var byCs = function (o) {
+        if (selectedCs === 'ALL') return true;
+        return o.cs === selectedCs;
+      };
+
+      var riskItems = allOrders.filter(function (o) {
+        return o.statusGroup === 'ongoing' && o.isRisk && byCs(o);
+      });
+      var returItems = allOrders.filter(function (o) {
+        return o.isRetur && !o.isReturCompleted && byCs(o);
+      });
+
+      el.riskCountBadge.textContent = riskItems.length;
+      el.returCountBadge.textContent = returItems.length;
+      el.attentionNavBadge.textContent = riskItems.length + returItems.length;
+
+      el.riskListBody.innerHTML = riskItems.length ? riskItems.map(function (o) {
+        var safeResi = o.resi.replace(/'/g, "\\'");
+        var safeLink = (o.linkResi || ('https://spx.co.id/track?' + o.resi)).replace(/'/g, "\\'");
+        var safeFb = (o.feedbackBerisiko || '').replace(/'/g, "\\'");
+        var waHref = o.feedbackBerisiko
+          ? 'https://api.whatsapp.com/send?text=' + encodeURIComponent(o.resi + ' ' + o.feedbackBerisiko)
+          : '';
+
+        return (
+          '<div class="zebra-row p-4">' +
+            '<div class="flex items-center justify-between gap-2 mb-1">' +
+              '<button type="button" onclick="copyText(\'' + safeResi + '\')" class="text-[14px] font-bold text-lotus-primary hover:text-lotus-accent cursor-pointer">' + escapeHtml(o.resi) + '</button>' +
+              '<span class="text-[11.5px] text-lotus-secondary">' + escapeHtml(o.cs || 'Tanpa CS') + ' &middot; ' + escapeHtml(o.tanggal) + '</span>' +
+            '</div>' +
+            '<p class="text-[13px] font-semibold text-lotus-primary">' + escapeHtml(o.nama) + (o.noHp ? ' <span class="font-normal text-lotus-secondary">&middot; ' + escapeHtml(o.noHp) + '</span>' : '') + '</p>' +
+            '<p class="text-[12px] text-lotus-secondary truncate mt-0.5">' + escapeHtml(o.alamat) + '</p>' +
+
+            ((o.sudahFu || o.feedbackBerisiko)
+              ? '<div class="flex flex-wrap items-center gap-1.5 mt-2">' +
+                  (o.sudahFu ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#6EE7B7]/15 text-lotus-delivered">&check; ' + escapeHtml(o.sudahFu) + '</span>' : '') +
+                  (o.feedbackBerisiko ? '<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#8B96F2]/15 text-lotus-accent">&check; Sudah Feedback</span>' : '') +
+                '</div>'
+              : '') +
+
+            (o.feedbackBerisiko
+              ? '<p class="text-[12px] text-lotus-primary mt-1.5 opacity-90">Feedback: "' + escapeHtml(o.feedbackBerisiko) + '"</p>'
+              : '') +
+
+            '<div class="flex flex-wrap items-center gap-2 mt-3">' +
+              '<button type="button" onclick="openLiveTrack(\'' + safeResi + '\', \'' + safeLink + '\')" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-semibold text-lotus-accent cursor-pointer">Lacak Paket</button>' +
+              (!o.sudahFu
+                ? '<button type="button" onclick="markSudahFu(\'' + safeResi + '\')" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-medium text-lotus-primary cursor-pointer">Tandai Sudah FU</button>'
+                : '') +
+              '<button type="button" onclick="openFeedbackModal(\'' + safeResi + '\', \'' + safeFb + '\')" class="lotus-cta-btn px-3.5 py-1 rounded-full text-[11.5px] font-bold cursor-pointer">' +
+                (o.feedbackBerisiko ? 'Edit Feedback' : 'Isi Feedback') +
+              '</button>' +
+              (waHref
+                ? '<a href="' + waHref + '" target="_blank" rel="noopener" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-semibold text-lotus-delivered">Kirim WA</a>'
+                : '') +
+            '</div>' +
+          '</div>'
+        );
+      }).join('') : '<div class="p-8 text-center text-[13px] text-lotus-muted">Tidak ada paket berisiko untuk filter ini.</div>';
+
+      el.returListBody.innerHTML = returItems.length ? returItems.map(function (o) {
+        var safeResi = o.resi.replace(/'/g, "\\'");
+        var safeLink = (o.linkResi || ('https://spx.co.id/track?' + o.resi)).replace(/'/g, "\\'");
+
+        return (
+          '<div class="zebra-row p-4">' +
+            '<div class="flex items-center justify-between gap-2 mb-1">' +
+              '<button type="button" onclick="copyText(\'' + safeResi + '\')" class="text-[14px] font-bold text-lotus-primary hover:text-lotus-accent cursor-pointer">' + escapeHtml(o.resi) + '</button>' +
+              '<span class="text-[11.5px] text-lotus-secondary">' + escapeHtml(o.cs || 'Tanpa CS') + ' &middot; ' + escapeHtml(o.tanggal) + '</span>' +
+            '</div>' +
+            '<p class="text-[13px] font-semibold text-lotus-primary">' + escapeHtml(o.nama) + (o.noHp ? ' <span class="font-normal text-lotus-secondary">&middot; ' + escapeHtml(o.noHp) + '</span>' : '') + '</p>' +
+            '<p class="text-[12px] text-lotus-secondary truncate mt-0.5">' + escapeHtml(o.alamat) + '</p>' +
+            '<div class="flex flex-wrap items-center gap-2 mt-3">' +
+              '<button type="button" onclick="openLiveTrack(\'' + safeResi + '\', \'' + safeLink + '\')" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-semibold text-lotus-accent cursor-pointer">Lacak Paket</button>' +
+              '<button type="button" onclick="openReturModal(\'' + safeResi + '\')" class="lotus-cta-btn px-3.5 py-1 rounded-full text-[11.5px] font-bold cursor-pointer">Lengkapi Bukti Retur</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }).join('') : '<div class="p-8 text-center text-[13px] text-lotus-muted">Semua data retur sudah dilengkapi.</div>';
+    }
+
+    el.btnCheckSpxRisk.addEventListener('click', function () {
+      var candidates = allOrders.filter(function (o) {
+        return o.statusGroup === 'ongoing' && !o.isRisk && o.needsSpxCheck;
+      }).map(function (o) { return o.resi; });
+
+      if (candidates.length === 0) {
+        showToast('Tidak ada kandidat ongoing baru untuk dicek');
+        return;
+      }
+
+      el.btnCheckSpxRisk.disabled = true;
+      el.btnCheckSpxLabel.textContent = 'Mengecek (' + Math.min(candidates.length, 15) + ')...';
+
+      postApi({ action: 'checkRiskBatch', resis: candidates })
+        .then(function (res) {
+          if (res.success) {
+            showToast('Selesai: ' + res.detected.length + ' gagal antar terdeteksi');
+            if (res.detected.length > 0) reloadAllOrders(true);
+          } else {
+            showToast(res.error || 'Gagal mengecek SPX');
+          }
+        })
+        .catch(function (e) { showToast('Error: ' + e.message); })
+        .finally(function () {
+          el.btnCheckSpxRisk.disabled = false;
+          el.btnCheckSpxLabel.textContent = 'Cek Gagal Antar Live SPX';
+        });
+    });
+
+    function markSudahFu(resi) {
+      postApi({ action: 'markFu', resi: resi })
+        .then(function (res) {
+          if (!res.success) {
+            showToast(res.error);
+            return;
+          }
+          var target = allOrders.find(function (o) { return o.resi === resi; });
+          if (target) target.sudahFu = res.value;
+          renderAttention();
+          showToast('Ditandai Sudah FU');
+        })
+        .catch(function (e) { showToast('Error: ' + e.message); });
+    }
+
+    function openFeedbackModal(resi, existingFb) {
+      document.getElementById('fbModalTitle').textContent = 'Feedback Berisiko · ' + resi;
+      document.getElementById('fbResiInput').value = resi;
+      document.getElementById('fbTextInput').value = existingFb || '';
+      document.getElementById('feedbackModalOverlay').classList.add('is-open');
+    }
+
+    function submitFeedbackBerisiko(openWaAfter) {
+      var resi = document.getElementById('fbResiInput').value;
+      var feedback = document.getElementById('fbTextInput').value.trim();
+      if (!feedback) {
+        showToast('Keterangan feedback wajib diisi');
+        return;
+      }
+
+      var btnOnly = document.getElementById('btnSaveFbOnly');
+      var btnWa = document.getElementById('btnSaveFbWa');
+      btnOnly.disabled = true;
+      btnWa.disabled = true;
+
+      postApi({ action: 'saveFeedback', resi: resi, feedback: feedback })
+        .then(function (res) {
+          if (!res.success) {
+            showToast(res.error);
+            return;
+          }
+          var target = allOrders.find(function (o) { return o.resi === resi; });
+          if (target) target.feedbackBerisiko = feedback;
+          closeActionModal('feedbackModalOverlay');
+          renderAttention();
+          showToast('Feedback tersimpan');
+
+          if (openWaAfter) {
+            var waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(resi + ' ' + feedback);
+            window.open(waUrl, '_blank');
+          }
+        })
+        .catch(function (e) { showToast('Error: ' + e.message); })
+        .finally(function () {
+          btnOnly.disabled = false;
+          btnWa.disabled = false;
+        });
+    }
+
+    function openReturModal(resi) {
+      document.getElementById('returModalTitle').textContent = 'Lengkapi Bukti Retur · ' + resi;
+      document.getElementById('returResiInput').value = resi;
+      document.getElementById('returAlasanInput').value = '';
+      document.getElementById('returCatatanInput').value = '';
+      document.getElementById('returFotoInput').value = '';
+      document.getElementById('returModalOverlay').classList.add('is-open');
+    }
+
+    function submitReturForm() {
+      var resi = document.getElementById('returResiInput').value;
+      var alasan = document.getElementById('returAlasanInput').value;
+      var catatan = document.getElementById('returCatatanInput').value.trim();
+      var fileInput = document.getElementById('returFotoInput');
+
+      if (!alasan || !catatan || !fileInput.files || !fileInput.files[0]) {
+        showToast('Alasan, catatan, dan 1 foto bukti wajib diisi');
+        return;
+      }
+
+      var btn = document.getElementById('btnSubmitRetur');
+      btn.disabled = true;
+      btn.textContent = 'Mengompres & Mengunggah...';
+
+      compressImageToBase64(fileInput.files[0], 1024, 0.72)
+        .then(function (compressed) {
+          return postApi({
+            action: 'saveRetur',
+            resi: resi,
+            alasan: alasan,
+            catatan: catatan,
+            imageBase64: compressed.base64,
+            mimeType: 'image/jpeg',
+            fileName: 'RETUR_' + resi + '.jpg'
+          });
+        })
+        .then(function (res) {
+          if (!res.success) {
+            showToast(res.error);
+            return;
+          }
+          var target = allOrders.find(function (o) { return o.resi === resi; });
+          if (target) {
+            target.alasanRetur = alasan;
+            target.catatanRetur = catatan;
+            target.fotoBuktiRetur = res.fileUrl;
+            target.isReturCompleted = true;
+          }
+          closeActionModal('returModalOverlay');
+          renderAttention();
+          renderCsCorner();
+          showToast('Data retur berhasil disimpan');
+        })
+        .catch(function (e) { showToast('Gagal mengunggah: ' + e.message); })
+        .finally(function () {
+          btn.disabled = false;
+          btn.textContent = 'Simpan & Selesaikan Retur';
+        });
+    }
+
+    function compressImageToBase64(file, maxDim, quality) {
+      return new Promise(function (resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function (ev) {
+          var img = new Image();
+          img.onload = function () {
+            var w = img.width;
+            var h = img.height;
+            if (w > maxDim || h > maxDim) {
+              if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+              else { w = Math.round(w * maxDim / h); h = maxDim; }
+            }
+            var canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            var dataUrl = canvas.toDataURL('image/jpeg', quality);
+            resolve({ base64: dataUrl.split(',')[1] });
+          };
+          img.onerror = reject;
+          img.src = ev.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function closeActionModal(id) {
+      document.getElementById(id).classList.remove('is-open');
+    }
+
+    /* 4. TAB 2: CS CORNER */
+    function resetCornerActiveMonth(triggerRender) {
+      var now = new Date();
+      var firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+      var lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      el.cornerDateFrom.value = toInputDate(firstDay);
+      el.cornerDateTo.value = toInputDate(lastDay);
+      if (triggerRender) renderCsCorner();
+    }
+
+    el.cornerDateFrom.addEventListener('change', renderCsCorner);
+    el.cornerDateTo.addEventListener('change', renderCsCorner);
+    el.cornerCsFilter.addEventListener('change', renderCsCorner);
+    el.btnActiveMonth.addEventListener('click', function () {
+      resetCornerActiveMonth(true);
+    });
+
+    function renderCsCorner() {
+      var fromVal = el.cornerDateFrom.value;
+      var toVal = el.cornerDateTo.value;
+      var csFilter = el.cornerCsFilter.value;
+
+      var periodOrders = allOrders.filter(function (o) {
+        if (!o.tanggalKey) return true;
+        if (fromVal && o.tanggalKey < fromVal) return false;
+        if (toVal && o.tanggalKey > toVal) return false;
+        return true;
+      });
+
+      var totalAllOrders = periodOrders.length;
+      var totalAllRetur = periodOrders.filter(function (o) { return o.isRetur; }).length;
+
+      var csMap = {};
+      periodOrders.forEach(function (o) {
+        var name = o.cs || 'Tanpa CS';
+        if (!csMap[name]) csMap[name] = { cs: name, total: 0, delivered: 0, ongoing: 0, retur: 0 };
+        csMap[name].total++;
+        if (o.statusGroup === 'delivered') csMap[name].delivered++;
+        else if (o.isRetur) csMap[name].retur++;
+        else csMap[name].ongoing++;
+      });
+
+      var csRows = Object.values(csMap)
+        .filter(function (r) { return csFilter === 'ALL' || r.cs === csFilter; })
+        .sort(function (a, b) { return b.total - a.total; });
+
+      document.querySelector('#csSummaryTable tbody').innerHTML = csRows.length ? csRows.map(function (r) {
+        var pctOwn = r.total ? ((r.retur / r.total) * 100).toFixed(2) : '0.00';
+        var pctAllOrder = totalAllOrders ? ((r.retur / totalAllOrders) * 100).toFixed(2) : '0.00';
+        var pctShareRetur = totalAllRetur ? ((r.retur / totalAllRetur) * 100).toFixed(2) : '0.00';
+
+        return (
+          '<tr class="zebra-row">' +
+            '<td class="py-3 px-4 font-semibold text-lotus-primary">' + escapeHtml(r.cs) + '</td>' +
+            '<td class="py-3 px-3.5 font-medium">' + r.total + '</td>' +
+            '<td class="py-3 px-3.5 text-lotus-delivered font-semibold">' + r.delivered + '</td>' +
+            '<td class="py-3 px-3.5 text-lotus-gold font-semibold">' + r.ongoing + '</td>' +
+            '<td class="py-3 px-3.5 text-lotus-retur font-bold">' + r.retur + '</td>' +
+            '<td class="py-3 px-3.5">' + pctOwn + '%</td>' +
+            '<td class="py-3 px-3.5">' + pctAllOrder + '%</td>' +
+            '<td class="py-3 px-4 font-semibold text-lotus-accent">' + pctShareRetur + '%</td>' +
+          '</tr>'
+        );
+      }).join('') : '<tr><td colspan="8" class="py-6 px-4 text-center text-lotus-muted">Belum ada data pada periode ini.</td></tr>';
+
+      var scopedOrders = periodOrders.filter(function (o) {
+        return csFilter === 'ALL' || (o.cs || 'Tanpa CS') === csFilter;
+      });
+      var scopedTotal = scopedOrders.length;
+
+      var regions = ['Jawa', 'Sumatra', 'Kalimantan', 'Sulawesi', 'Sunda Kecil', 'Indonesia Timur', 'Lainnya'];
+      var regStats = {};
+      regions.forEach(function (reg) {
+        regStats[reg] = { region: reg, total: 0, delivered: 0, ongoing: 0, retur: 0 };
+      });
+
+      scopedOrders.forEach(function (o) {
+        var reg = regStats[o.region] ? o.region : 'Lainnya';
+        regStats[reg].total++;
+        if (o.statusGroup === 'delivered') regStats[reg].delivered++;
+        else if (o.isRetur) regStats[reg].retur++;
+        else regStats[reg].ongoing++;
+      });
+
+      document.querySelector('#regionBreakdownTable tbody').innerHTML = regions
+        .filter(function (reg) { return reg !== 'Lainnya' || regStats[reg].total > 0; })
+        .map(function (reg) {
+          var s = regStats[reg];
+          var shareOrder = scopedTotal ? ((s.total / scopedTotal) * 100).toFixed(1) : '0.0';
+          var rateRetur = s.total ? ((s.retur / s.total) * 100).toFixed(1) : '0.0';
+          return (
+            '<tr class="zebra-row">' +
+              '<td class="py-3 px-4 font-semibold text-lotus-primary">' + reg + '</td>' +
+              '<td class="py-3 px-3.5 font-medium">' + s.total + '</td>' +
+              '<td class="py-3 px-3.5">' + shareOrder + '%</td>' +
+              '<td class="py-3 px-3.5 text-lotus-delivered">' + s.delivered + '</td>' +
+              '<td class="py-3 px-3.5 text-lotus-gold">' + s.ongoing + '</td>' +
+              '<td class="py-3 px-3.5 text-lotus-retur font-bold">' + s.retur + '</td>' +
+              '<td class="py-3 px-4">' + rateRetur + '%</td>' +
+            '</tr>'
+          );
+        }).join('');
+
+      var scopedReturs = scopedOrders.filter(function (o) { return o.isRetur; });
+      var reasonMap = {};
+      scopedReturs.forEach(function (o) {
+        var reason = o.alasanRetur || 'Belum diisi / Tanpa keterangan';
+        if (!reasonMap[reason]) {
+          reasonMap[reason] = {
+            reason: reason,
+            total: 0,
+            Jawa: 0,
+            Sumatra: 0,
+            Kalimantan: 0,
+            Sulawesi: 0,
+            'Sunda Kecil': 0,
+            'Indonesia Timur': 0
+          };
+        }
+        reasonMap[reason].total++;
+        if (reasonMap[reason][o.region] !== undefined) {
+          reasonMap[reason][o.region]++;
+        }
+      });
+
+      var reasonRows = Object.values(reasonMap).sort(function (a, b) { return b.total - a.total; });
+      document.querySelector('#reasonByRegionTable tbody').innerHTML = reasonRows.length ? reasonRows.map(function (r) {
+        var pct = scopedReturs.length ? ((r.total / scopedReturs.length) * 100).toFixed(1) : '0.0';
+        return (
+          '<tr class="zebra-row">' +
+            '<td class="py-3 px-4 font-semibold text-lotus-primary">' + escapeHtml(r.reason) + '</td>' +
+            '<td class="py-3 px-3 font-bold text-lotus-retur">' + r.total + '</td>' +
+            '<td class="py-3 px-3">' + pct + '%</td>' +
+            '<td class="py-3 px-3">' + r.Jawa + '</td>' +
+            '<td class="py-3 px-3">' + r.Sumatra + '</td>' +
+            '<td class="py-3 px-3">' + r.Kalimantan + '</td>' +
+            '<td class="py-3 px-3">' + r.Sulawesi + '</td>' +
+            '<td class="py-3 px-3">' + r['Sunda Kecil'] + '</td>' +
+            '<td class="py-3 px-4">' + r['Indonesia Timur'] + '</td>' +
+          '</tr>'
+        );
+      }).join('') : '<tr><td colspan="9" class="py-6 px-4 text-center text-lotus-muted">Belum ada data retur pada periode ini.</td></tr>';
+
+      renderCornerCharts(csRows, reasonRows);
+    }
+
+    function renderCornerCharts(csRows, reasonRows) {
+      var isLight = document.documentElement.classList.contains('light');
+      var textColor = isLight ? '#595175' : '#A9A0C4';
+      var gridColor = isLight ? 'rgba(20, 16, 38, 0.08)' : 'rgba(227, 186, 245, 0.11)';
+
+      var ctx1 = document.getElementById('chartCsStatus').getContext('2d');
+      if (chartStatusInstance) chartStatusInstance.destroy();
+      chartStatusInstance = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: csRows.map(function (r) { return r.cs; }),
+          datasets: [
+            { label: 'Delivered', data: csRows.map(function (r) { return r.delivered; }), backgroundColor: '#6EE7B7' },
+            { label: 'Ongoing', data: csRows.map(function (r) { return r.ongoing; }), backgroundColor: '#F6C856' },
+            { label: 'Retur', data: csRows.map(function (r) { return r.retur; }), backgroundColor: '#FDA4AF' }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans' } } } },
+          scales: {
+            x: { stacked: true, ticks: { color: textColor }, grid: { color: gridColor } },
+            y: { stacked: true, beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }
+          }
+        }
+      });
+
+      var ctx2 = document.getElementById('chartReturReason').getContext('2d');
+      if (chartReasonInstance) chartReasonInstance.destroy();
+      chartReasonInstance = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: reasonRows.map(function (r) { return r.reason; }),
+          datasets: [{
+            data: reasonRows.map(function (r) { return r.total; }),
+            backgroundColor: ['#8B96F2', '#FDA4AF', '#F6C856', '#6EE7B7', '#B78EF5', '#38BDF8', '#FB923C', '#A3E635', '#F472B6', '#94A3B8'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { color: textColor, font: { family: 'Plus Jakarta Sans', size: 11 } } }
+          }
+        }
+      });
+    }
+
+    /* 5. SLIDE-UP FROSTED BOTTOM SHEET */
+    function extractCityName(locationStr) {
+      if (!locationStr) return '';
+      var cleaned = locationStr
+        .replace(/\b(First Mile Hub|Last Mile Hub|Sorting Center|Gateway|Hub|DC)\b/gi, '')
+        .replace(/\d+/g, '')
+        .trim();
+      return cleaned || locationStr;
+    }
+
+    function openLiveTrack(resiOrUrl, fallbackLink) {
+      var cleanResi = resiOrUrl.indexOf('?') !== -1
+        ? resiOrUrl.split('?')[1].split('&')[0].trim()
+        : resiOrUrl.trim();
+
+      activeDrawerResi = cleanResi;
+      el.drawerResiCode.textContent = cleanResi;
+      el.drawerCopyLabel.textContent = 'Salin';
+      el.trackDrawerOverlay.classList.add('is-open');
+      el.trackDrawerOverlay.setAttribute('aria-hidden', 'false');
+
+      if (trackingCache[cleanResi]) {
+        renderDrawerTracking(trackingCache[cleanResi], fallbackLink);
+        return;
+      }
+
+      el.drawerBody.innerHTML =
+        '<div class="space-y-5 py-2" aria-hidden="true">' +
+          '<div class="h-3.5 w-32 rounded-full shimmer-bar"></div>' +
+          '<div class="h-7 w-3/4 rounded-lg shimmer-bar"></div>' +
+          '<div class="h-3 w-1/2 rounded-full shimmer-bar"></div>' +
+          '<div class="pt-3 space-y-2.5">' +
+            '<div class="flex justify-between"><div class="h-4 w-20 rounded shimmer-bar"></div><div class="h-4 w-20 rounded shimmer-bar"></div></div>' +
+            '<div class="h-[2px] w-full rounded-full shimmer-bar"></div>' +
+          '</div>' +
+          '<hr class="lotus-divider my-6" />' +
+          '<div class="space-y-4">' +
+            '<div class="h-10 w-full rounded-lg shimmer-bar"></div>' +
+            '<div class="h-10 w-5/6 rounded-lg shimmer-bar"></div>' +
+            '<div class="h-10 w-4/6 rounded-lg shimmer-bar"></div>' +
+          '</div>' +
+        '</div>';
+
+      jsonpRequest({ session: SESSION_TOKEN, action: 'track', resi: cleanResi }, function (err, res) {
+        if (res && res.authError) {
+          closeTrackDrawer();
+          clearSavedSession(res.error);
+          return;
+        }
+        if (err || !res || !res.success) {
+          var msg = (err && err.message) || (res && res.error) || 'Data pelacakan SPX belum tersedia.';
+          el.drawerBody.innerHTML =
+            '<div class="py-10 text-center">' +
+              '<p class="text-[14px] font-medium text-lotus-retur mb-2">' + escapeHtml(msg) + '</p>' +
+              '<p class="text-[12.5px] text-lotus-secondary mb-5">Anda tetap dapat mengeceknya langsung melalui situs resmi SPX.</p>' +
+              '<a href="' + escapeHtml(fallbackLink) + '" target="_blank" rel="noopener" class="lotus-cta-btn inline-flex items-center gap-1.5 text-[12.5px] font-bold px-5 py-2.5 rounded-full">' +
+                '<span>Buka spx.co.id</span>' +
+                '<span>&nearr;</span>' +
+              '</a>' +
+            '</div>';
+          return;
+        }
+
+        trackingCache[cleanResi] = res;
+        renderDrawerTracking(res, fallbackLink);
+      });
+    }
+
+    function renderDrawerTracking(data, fallbackLink) {
+      var riwayat = data.riwayat || [];
+      var isDelivered = (data.statusUtama || '').toLowerCase().indexOf('deliver') !== -1;
+      var latest = riwayat[0] || {};
+      var latestCode = latest.milestoneCode || 1;
+
+      var progressPct = 22;
+      if (isDelivered || latestCode >= 8) progressPct = 100;
+      else if (latestCode >= 6) progressPct = 88;
+      else if (latestCode >= 5) progressPct = 68;
+      else if (latestCode >= 4) progressPct = 42;
+
+      var originCity = 'Pengirim';
+      for (var i = riwayat.length - 1; i >= 0; i--) {
+        if (riwayat[i].lokasi) {
+          originCity = extractCityName(riwayat[i].lokasi);
+          break;
+        }
+      }
+      var destinationCity = latest.lokasi ? extractCityName(latest.lokasi) : 'Tujuan';
+
+      var latestTimeStr = '';
+      if (latest.waktu) {
+        var dLatest = new Date(latest.waktu * 1000);
+        latestTimeStr = dLatest.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) +
+          ', ' + dLatest.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
+      }
+
+      var statusTagLabel = isDelivered ? 'Terkirim' : (data.statusUtama || 'Dalam Perjalanan');
+      var headlineText = latest.deskripsi || (isDelivered ? 'Paket telah diterima di alamat tujuan' : 'Paket sedang dalam proses pengiriman');
+
+      var html =
+        '<div class="mb-2 flex items-center justify-between gap-2">' +
+          '<div class="flex items-center gap-2">' +
+            '<span class="font-sans text-[11.5px] font-semibold uppercase tracking-wider ' + (isDelivered ? 'text-lotus-delivered' : 'text-lotus-accent') + '">' +
+              escapeHtml(statusTagLabel) +
+            '</span>' +
+            (isDelivered ? '<span class="font-sans text-[11.5px] font-semibold text-lotus-delivered">&bull; Selesai</span>' : '') +
+          '</div>' +
+          '<a href="' + escapeHtml(fallbackLink) + '" target="_blank" rel="noopener" class="font-sans text-[11.5px] text-lotus-secondary hover:text-lotus-primary underline underline-offset-4">' +
+            'spx.co.id &nearr;' +
+          '</a>' +
+        '</div>' +
+
+        '<h3 class="editorial-heading text-[21px] sm:text-[23px] text-lotus-primary leading-[1.25] mb-2">' +
+          escapeHtml(headlineText) +
+        '</h3>' +
+
+        (latestTimeStr
+          ? '<p class="text-[12.5px] text-lotus-secondary mb-7">Pembaruan terakhir: <span class="font-semibold text-lotus-primary">' + latestTimeStr + '</span></p>'
+          : '<div class="mb-6"></div>') +
+
+        '<div>' +
+          '<div class="flex items-end justify-between gap-4 mb-2.5">' +
+            '<div>' +
+              '<span class="block font-sans text-[10px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Asal</span>' +
+              '<p class="text-[15px] font-semibold text-lotus-primary leading-tight">' + escapeHtml(originCity) + '</p>' +
+            '</div>' +
+            '<div class="text-right">' +
+              '<span class="block font-sans text-[10px] font-semibold uppercase tracking-wider text-lotus-muted mb-0.5">Tujuan</span>' +
+              '<p class="text-[15px] font-semibold text-lotus-primary leading-tight">' + escapeHtml(destinationCity) + '</p>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="route-track-bg relative w-full h-[2px] rounded-full my-2.5">' +
+            '<div style="width:' + progressPct + '%;" class="route-progress-beam h-full rounded-full transition-all duration-700 ease-out"></div>' +
+            '<span style="left:' + progressPct + '%;" class="route-comet-dot absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full"></span>' +
+          '</div>' +
+
+          '<div class="flex items-center justify-between gap-3 text-[11.5px] text-lotus-secondary mt-2">' +
+            '<span>' + (isDelivered ? 'Pengiriman selesai dengan bukti tanda terima' : 'Perjalanan paket terpantau real-time') + '</span>' +
+            '<span class="font-sans text-[11.5px] font-semibold ' + (isDelivered ? 'text-lotus-delivered' : 'text-lotus-gold') + ' shrink-0">' + progressPct + '%</span>' +
+          '</div>' +
+        '</div>' +
+
+        '<hr class="lotus-divider my-7" />' +
+
+        '<div>' +
+          '<div class="flex items-center justify-between mb-5">' +
+            '<h4 class="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-lotus-secondary">Riwayat Perjalanan</h4>' +
+            '<span class="font-sans text-[11.5px] text-lotus-muted">' + riwayat.length + ' pembaruan</span>' +
+          '</div>';
+
+      if (riwayat.length === 0) {
+        html += '<p class="text-[13px] text-lotus-secondary py-4">Belum ada riwayat perjalanan tercatat.</p>';
+      } else {
+        html += '<ol class="relative">';
+        riwayat.forEach(function (ev, idx) {
+          var isFirst = idx === 0;
+          var isLast = idx === riwayat.length - 1;
+          var dt = new Date(ev.waktu * 1000);
+          var waktuStr = dt.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }) +
+            ', ' + dt.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+          html +=
+            '<li class="relative flex gap-3.5">' +
+              '<div class="relative flex flex-col items-center w-4 shrink-0">' +
+                (!isLast ? '<span class="timeline-vertical-line absolute top-4 bottom-0 w-[1px]" aria-hidden="true"></span>' : '') +
+                '<div class="relative w-4 h-4 mt-1 flex items-center justify-center">' +
+                  (isFirst
+                    ? '<span class="timeline-active-node w-2.5 h-2.5 rounded-full"></span>'
+                    : '<span class="timeline-past-node w-1.5 h-1.5 rounded-full"></span>') +
+                '</div>' +
+              '</div>' +
+
+              '<div class="' + (isLast ? 'pb-0' : 'pb-6') + ' flex-1 min-w-0">' +
+                '<div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5 mb-0.5">' +
+                  '<p class="text-[13.5px] leading-snug ' + (isFirst ? 'font-semibold text-lotus-primary' : 'font-medium text-lotus-primary opacity-85') + '">' +
+                    escapeHtml(ev.deskripsi) +
+                  '</p>' +
+                  '<time class="font-sans text-[11.5px] shrink-0 ' + (isFirst ? 'text-lotus-gold font-semibold' : 'text-lotus-muted') + '">' +
+                    waktuStr +
+                  '</time>' +
+                '</div>' +
+                (ev.lokasi
+                  ? '<p class="text-[12px] text-lotus-secondary mt-0.5">' + escapeHtml(ev.lokasi) + '</p>'
+                  : '') +
+              '</div>' +
+            '</li>';
+        });
+        html += '</ol>';
+      }
+
+      html += '</div>';
+      el.drawerBody.innerHTML = html;
+    }
+
+    function closeTrackDrawer() {
+      el.trackDrawerOverlay.classList.remove('is-open');
+      el.trackDrawerOverlay.setAttribute('aria-hidden', 'true');
+    }
+
+    el.brandResetBtn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    el.closeDrawerBtn.addEventListener('click', closeTrackDrawer);
+    el.drawerBackdrop.addEventListener('click', closeTrackDrawer);
+    el.drawerCopyBtn.addEventListener('click', function () {
+      if (!activeDrawerResi) return;
+      copyText(activeDrawerResi);
+      el.drawerCopyLabel.textContent = 'Disalin';
+      setTimeout(function () { el.drawerCopyLabel.textContent = 'Salin'; }, 1600);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        closeTrackDrawer();
+        closeActionModal('feedbackModalOverlay');
+        closeActionModal('returModalOverlay');
+      }
+    });
+
+    function toInputDate(d) {
+      return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+
+    function escapeHtml(str) {
+      var div = document.createElement('div');
+      div.textContent = str == null ? '' : str;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
