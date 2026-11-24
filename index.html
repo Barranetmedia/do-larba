@@ -870,7 +870,7 @@
     var API_URL = "https://script.google.com/macros/s/AKfycbyZo8dEMfDcS84-WDwZiZeZS-WzdAwLOAyr_lU1TAovOZdW7PV0Qh338mhNJRDOKua1oA/exec";
     var GOOGLE_CLIENT_ID = "315770296664-pkethfkpdhd9bqj1lnjj0ec06eos8rlv.apps.googleusercontent.com";
     var SESSION_KEY = "larba_session_v1";
-    var ATTENTION_MIN_DATE = "2026-11-20"; // Hanya tampilkan & deteksi mulai 20 November 2026
+    var ATTENTION_MIN_DATE = "2026-11-20";
 
     var SESSION_TOKEN = null;
     try { SESSION_TOKEN = localStorage.getItem(SESSION_KEY); } catch (e) {}
@@ -988,6 +988,35 @@
         showToast('Gagal menyalin resi');
       }
       document.body.removeChild(temp);
+    }
+
+    /* HELPER WHATSAPP KE NOMOR CUSTOMER */
+    function toWaPhone(rawHp) {
+      var digits = String(rawHp || '').replace(/\D/g, '');
+      if (!digits) return '';
+      if (digits.indexOf('0') === 0) return '62' + digits.slice(1);
+      if (digits.indexOf('8') === 0) return '62' + digits;
+      return digits;
+    }
+
+    function buildCustomerWaUrl(rawHp, messageText) {
+      var waPhone = toWaPhone(rawHp);
+      var encoded = encodeURIComponent(messageText);
+      return waPhone
+        ? 'https://api.whatsapp.com/send?phone=' + waPhone + '&text=' + encoded
+        : 'https://api.whatsapp.com/send?text=' + encoded;
+    }
+
+    function buildRiskCustomerMessage(o) {
+      var namaPaket = (o.produk || 'Paket').trim();
+      var noResi = (o.resi || '').trim();
+      return namaPaket + ' dengan resi ' + noResi + '\n' +
+        'belum sukses diterima \uD83E\uDD79\n\n' +
+        '*Apakah kakak sudah bertemu atau dihubungi kurir SPX/Shopee kak?*';
+    }
+
+    function buildReturCustomerMessage() {
+      return 'kenapa paketnya tidak diterima kak?';
     }
 
     /* 2. NAVIGATION & SESI LOGIN 30 HARI */
@@ -1200,7 +1229,7 @@
       });
     }
 
-    /* 3. TAB 1: NEEDS YOUR ATTENTION (MULAI 20 NOV 2026 & URUT TERBARU DI ATAS) */
+    /* 3. TAB 1: NEEDS YOUR ATTENTION */
     el.attCsFilter.addEventListener('change', renderAttention);
 
     function isWithinAttentionWindow(o) {
@@ -1241,7 +1270,8 @@
         var safeResi = o.resi.replace(/'/g, "\\'");
         var safeLink = (o.linkResi || ('https://spx.co.id/track?' + o.resi)).replace(/'/g, "\\'");
         var safeFb = (o.feedbackBerisiko || '').replace(/'/g, "\\'");
-        var waHref = o.feedbackBerisiko
+        var waCustomerHref = buildCustomerWaUrl(o.noHp, buildRiskCustomerMessage(o));
+        var waFeedbackHref = o.feedbackBerisiko
           ? 'https://api.whatsapp.com/send?text=' + encodeURIComponent(o.resi + ' ' + o.feedbackBerisiko)
           : '';
 
@@ -1252,7 +1282,8 @@
               '<span class="text-[11.5px] text-lotus-secondary">' + escapeHtml(o.cs || 'Tanpa CS') + ' &middot; ' + escapeHtml(o.tanggal) + '</span>' +
             '</div>' +
             '<p class="text-[13px] font-semibold text-lotus-primary">' + escapeHtml(o.nama) + (o.noHp ? ' <span class="font-normal text-lotus-secondary">&middot; ' + escapeHtml(o.noHp) + '</span>' : '') + '</p>' +
-            '<p class="text-[12px] text-lotus-secondary truncate mt-0.5">' + escapeHtml(o.alamat) + '</p>' +
+            (o.produk ? '<p class="text-[12px] font-medium text-lotus-accent mt-0.5">' + escapeHtml(o.produk) + '</p>' : '') +
+            '<p class="text-[12px] text-lotus-secondary truncate mt-0.5">' + escapeHtml(o.alamat) + (o.provinsi ? ' (' + escapeHtml(o.provinsi) + ')' : '') + '</p>' +
 
             ((o.sudahFu || o.feedbackBerisiko)
               ? '<div class="flex flex-wrap items-center gap-1.5 mt-2">' +
@@ -1266,6 +1297,7 @@
               : '') +
 
             '<div class="flex flex-wrap items-center gap-2 mt-3">' +
+              '<a href="' + waCustomerHref + '" target="_blank" rel="noopener" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-semibold text-lotus-delivered">Kirim WA</a>' +
               '<button type="button" onclick="openLiveTrack(\'' + safeResi + '\', \'' + safeLink + '\')" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-semibold text-lotus-accent cursor-pointer">Lacak Paket</button>' +
               (!o.sudahFu
                 ? '<button type="button" onclick="markSudahFu(\'' + safeResi + '\')" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-medium text-lotus-primary cursor-pointer">Tandai Sudah FU</button>'
@@ -1273,8 +1305,8 @@
               '<button type="button" onclick="openFeedbackModal(\'' + safeResi + '\', \'' + safeFb + '\')" class="lotus-cta-btn px-3.5 py-1 rounded-full text-[11.5px] font-bold cursor-pointer">' +
                 (o.feedbackBerisiko ? 'Edit Feedback' : 'Isi Feedback') +
               '</button>' +
-              (waHref
-                ? '<a href="' + waHref + '" target="_blank" rel="noopener" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-semibold text-lotus-delivered">Kirim WA</a>'
+              (waFeedbackHref
+                ? '<a href="' + waFeedbackHref + '" target="_blank" rel="noopener" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-medium text-lotus-secondary hover:text-lotus-primary">Kirim Feedback WA</a>'
                 : '') +
             '</div>' +
           '</div>'
@@ -1284,6 +1316,7 @@
       el.returListBody.innerHTML = returItems.length ? returItems.map(function (o) {
         var safeResi = o.resi.replace(/'/g, "\\'");
         var safeLink = (o.linkResi || ('https://spx.co.id/track?' + o.resi)).replace(/'/g, "\\'");
+        var waReturHref = buildCustomerWaUrl(o.noHp, buildReturCustomerMessage());
 
         return (
           '<div class="zebra-row p-4">' +
@@ -1292,8 +1325,10 @@
               '<span class="text-[11.5px] text-lotus-secondary">' + escapeHtml(o.cs || 'Tanpa CS') + ' &middot; ' + escapeHtml(o.tanggal) + '</span>' +
             '</div>' +
             '<p class="text-[13px] font-semibold text-lotus-primary">' + escapeHtml(o.nama) + (o.noHp ? ' <span class="font-normal text-lotus-secondary">&middot; ' + escapeHtml(o.noHp) + '</span>' : '') + '</p>' +
-            '<p class="text-[12px] text-lotus-secondary truncate mt-0.5">' + escapeHtml(o.alamat) + '</p>' +
+            (o.produk ? '<p class="text-[12px] font-medium text-lotus-accent mt-0.5">' + escapeHtml(o.produk) + '</p>' : '') +
+            '<p class="text-[12px] text-lotus-secondary truncate mt-0.5">' + escapeHtml(o.alamat) + (o.provinsi ? ' (' + escapeHtml(o.provinsi) + ')' : '') + '</p>' +
             '<div class="flex flex-wrap items-center gap-2 mt-3">' +
+              '<a href="' + waReturHref + '" target="_blank" rel="noopener" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-semibold text-lotus-delivered">Kirim WA</a>' +
               '<button type="button" onclick="openLiveTrack(\'' + safeResi + '\', \'' + safeLink + '\')" class="lotus-pill px-3 py-1 rounded-full text-[11.5px] font-semibold text-lotus-accent cursor-pointer">Lacak Paket</button>' +
               '<button type="button" onclick="openReturModal(\'' + safeResi + '\')" class="lotus-cta-btn px-3.5 py-1 rounded-full text-[11.5px] font-bold cursor-pointer">Lengkapi Bukti Retur</button>' +
             '</div>' +
